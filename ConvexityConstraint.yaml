@@ -1,0 +1,23 @@
+name: ConvexityConstraint
+channels:
+  - conda-forge
+#  - plotly
+dependencies:
+ - eigen
+ - cgal
+ - nlopt
+#  - python
+#  - matplotlib
+#  - notebook
+#  - scipy
+#  - conda-build
+#  - conda-verify
+#  - anaconda-client
+#  - nbformat
+#  - nbdime
+#  - ffmpeg
+#  - cudatoolkit
+#  - cupy
+#  - plotly
+#  - pip
+#  - ipywidgets
