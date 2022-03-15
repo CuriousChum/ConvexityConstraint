@@ -92,10 +92,20 @@ void Functional::Compute(const N::VectorType & input){
         va=input[vi];
 		
 		/* Geometric computation here.
-		 The triangles 
 		 
+		 The triangles of vertices [s,t,u] and [s,t,v] are facets of the convex Hull
+		 polytope K(a). They share the edge [s,t], which is denoted as eit
+		 when oriented t->s, and opp otherwise.
+		 
+		 This edge corresponds to another edge of the dual convex polytope H(a),
+		 denoted [pu,pv] below.
+		 
+		 We are interesed in the area of the facets of the dual polytope H(a),
+		 which are themselves planar convex sets.
+		 One possibility to compute them is to collect all the dual edges. However, it
+		 turns out that the derivative of this area has a simpler expression, and the
+		 area is eventually reconstructed using Euler's identity for homogeneous functions.
 		 */
-        
         
         typedef CGT::K::Vector_2 Vector_2;
         typedef CGT::K::Aff_transformation_2 Aff_transformation_2;

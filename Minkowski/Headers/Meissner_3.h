@@ -6,6 +6,10 @@
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
 
+/*
+ Numerical solution of the three dimensional Meissner problem. See Meissner_2 for comments.
+ */
+
 #ifndef Minkowski_Meissner_3_h
 #define Minkowski_Meissner_3_h
 
