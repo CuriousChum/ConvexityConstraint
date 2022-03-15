@@ -1,21 +1,28 @@
 //
-//  Meissner_2_Test.h
+//  Meissner_2_Test.cpp
 //  Minkowski
 //
 //  Created by Jean-Marie Mirebeau on 04/09/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
 
-#ifndef Minkowski_Meissner_2_Test_h
-#define Minkowski_Meissner_2_Test_h
-
 #include <fstream>
-#include "Meissner_2.h"
+#include "Headers/Meissner_2.h"
 #include "nlopt.hpp"
+
 namespace Meissner_2_Test {
     using namespace Meissner_2;
     typedef N::VectorType NV;
     
+	/**
+	 Numerically solve the two dimensional Meissner problem, also known as Reulaux problem,
+	 of the convex body with unit width and minimum volume.
+	 
+	 Input :
+	  - n : the number of facets of the convex body. The facet normals are regularly spaced unit vectors.
+	  - delta : a small parameter defining the initial condition, which is a perturbation of the sphere of radius 1/2.
+	 (Setting delta = 0 fails, since the sphere of radius 1/2 is a stationnary point.)
+	 */
     void Test1(int n=20, ScalarType delta=0.05){
         Minkowski_2::Functional mink;
         G::VectorList & pts = mink.pts;
@@ -53,4 +60,8 @@ namespace Meissner_2_Test {
     }
 }
 
-#endif
+
+int main(int argc, const char * argv[]) {
+    Meissner_2_Test::Test1(200,0.05);
+    return 0;
+}

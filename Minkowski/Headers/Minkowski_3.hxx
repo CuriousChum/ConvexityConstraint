@@ -11,7 +11,9 @@
 
 int Functional::Compute(N::VectorType & input, N::VectorType & output){
     ErrCode error;
-    error=MakeHull(input); if(error!=ErrCode::NoError) return (int)error;
+    error=MakeHull(input);
+	if(error!=ErrCode::NoError) return (int)error;
+	
     Compute(input);
     output = facetAreas;
     Normalize(input);
@@ -25,6 +27,7 @@ CGT::Vector Functional::Point(int i) const {
     return CGT::Vector( pt[0], pt[1], pt[2]);
 }
 
+/// Computes the polytope K(a), see class description.
 Functional::ErrCode Functional::MakeHull(const N::VectorType & input) {
     assert(input.size()==Size());
     
@@ -39,8 +42,11 @@ Functional::ErrCode Functional::MakeHull(const N::VectorType & input) {
     
     CGAL::convex_hull_3(scaledPts.begin(), scaledPts.end(), poly);
     
+	/* If some vertices are interior, then the dual polytope has empty facets,
+	which is not acceptable for our optimization purposes. */
     if( poly.size_of_vertices() < Size() ) return ErrCode::InteriorPoints;
     
+	// In the rest of this function, we assign indices to the vertices of the polyhedron.
     struct OrderingType {
         typedef std::array<ScalarType,3> ArrayType;
         bool operator()(CGT::Point a,CGT::Point b) const {
@@ -71,7 +77,7 @@ void Functional::Compute(const N::VectorType & input){
         ui= opp->next()->vertex()->index,
         vi= eit->next()->vertex()->index;
         
-        if(si>ti) continue; // -> Counts only once each edge
+        if(si>ti) continue; // -> Count only once each edge
         
         const CGT::Vector
         s=Point(si),
@@ -84,6 +90,11 @@ void Functional::Compute(const N::VectorType & input){
         ta=input[ti],
         ua=input[ui],
         va=input[vi];
+		
+		/* Geometric computation here.
+		 The triangles 
+		 
+		 */
         
         
         typedef CGT::K::Vector_2 Vector_2;

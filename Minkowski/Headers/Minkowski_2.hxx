@@ -46,6 +46,11 @@ void Functional::Compute(const N::VectorType & input){
         
         const ScalarType ra=input[ri], sa=input[si], ta=input[ti];
         const G::Vector r = pts.col(ri), s=pts.col(si), t=pts.col(ti);
+		
+		/*
+		 Geometric computation here : compute the length of the facet defined as
+		 {z in R^2; <z,s> = sa, <z,r> <= ra, <z,t> <= ta}
+		 */
         
         const ScalarType Srs = G::ScalarProduct(r,s),   Sst = G::ScalarProduct(s,t);
         const ScalarType Drs = G::Determinant(r,s),     Dst = G::Determinant(s,t);
@@ -70,8 +75,14 @@ void Functional::Normalize(N::VectorType & input) {
 
 int Functional::DescentDirection(N::VectorType & diff) {
     if(referenceIndices[0]==N::BadIndex) SetReferenceIndices();
-    for(int i: referenceIndices)
+    
+	/*
+	 The jacobian matrix is singular, because the convex body area is translation invariant.
+	 We make it non-singular by adding two diagonal entries. This selects a particular solution.
+	 */
+	for(int i: referenceIndices)
         jacobian.push_back({i,i,1});
+	
     N::SparseMatrixType m;
     m.resize(Size(), Size());
     m.setFromTriplets(jacobian.begin(), jacobian.end());

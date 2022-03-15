@@ -1,16 +1,13 @@
 //
-//  Meissner_3_Test.h
+//  Meissner_3_Test.cpp
 //  Minkowski
 //
 //  Created by Jean-Marie Mirebeau on 04/09/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
 
-#ifndef Minkowski_Meissner_3_Test_h
-#define Minkowski_Meissner_3_Test_h
-
 #include <fstream>
-#include "Meissner_3.h"
+#include "Headers/Meissner_3.h"
 #include "nlopt.hpp"
 
 namespace Meissner_3_Test {
@@ -110,4 +107,23 @@ namespace Meissner_3_Test {
 
     }
 }
-#endif
+
+int main(int argc, const char * argv[]) {
+    /*
+    if(argc>1){
+        const int i= atoi(argv[1]);
+        std::cout << i << std::endl;
+        
+        double stopVal = 0.4197;
+        if(argc>2) stopVal = atof(argv[2]);
+        
+        if(2<=i && i<=10)
+            Meissner_3_Test::Test1(i,stopVal);
+    }
+ */
+    
+    for(int i=5; i<10; ++i)
+        Meissner_3_Test::Test1(i);
+
+    return 0;
+}

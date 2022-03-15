@@ -7,7 +7,10 @@
 //
 
 // This class is designed to solve an inverse problem F(x)=y using the newton method.
-// The functional of interest may have some invariance, thus
+// The functional of interest provides method to evaluate the function F and the descent direction.
+// In the cases of interest, the functionals have some translation invariance,
+// hence a special care is needed in the computation of the descent direction.
+// In addition, a normalized representative of the input is computed.
 
 
 #ifndef Minkowski_QuotientedNewton_h
@@ -41,13 +44,40 @@ namespace QuotientedNewton {
 
     
     struct FunctionalBase {
-        virtual int Compute(VectorType &, VectorType &) {assert(false);};
-        virtual int DescentDirection(VectorType &) = 0;
+		/**
+		 Base class for mqppings y = F(x), possibly invariant to some translations of x,
+		 and to which the Newton method will be applied.
+		 */
+		
+		/**
+		 Evaluate the functional and normalize the input.
+		 Input :
+		  - x point where to evaluate the functional.
+		 Output :
+		  - x, normalized w.r.t translation invariance.
+		  - y = F(x)
+		 Return value : error code
+		 */
+        virtual int Compute(VectorType & x, VectorType & y) {assert(false);};
+		
+		/**
+		 Compute the newton descent direction associated to the given residue, and the latest evaluation point x.
+		 Input :
+		  - r, résidue
+		 Output :
+		  - r, descent direction
+		 Return value : error code.
+		 */
+        virtual int DescentDirection(VectorType & r) = 0;
         ScalarType constraintMultiplier = 1; // For constraint penalization
     };
     
     
     struct NewtonScheme {
+		/**
+		 Class implementing a Damped Newton method.
+		 */
+		
         ScalarType delta=1;
         ScalarType deltaGranularity = 1.4;
         ScalarType deltaMin = 1e-5;
@@ -57,6 +87,10 @@ namespace QuotientedNewton {
         int maxIterations=200;
         
         struct TestType {
+			/**
+			 Class implementing an (for now unspecified) stopping criterion.
+			 */
+			
             ScalarType lowerBound;
             int delay;
             std::vector<ScalarType> values;

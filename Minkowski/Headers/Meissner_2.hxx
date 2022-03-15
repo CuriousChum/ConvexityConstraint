@@ -34,7 +34,24 @@ int Functional::Compute(N::VectorType & input, N::VectorType & output){
     
 }*/
 
-ScalarType EvaluateVolume(const std::vector<ScalarType> & x, std::vector<ScalarType> & grad, void * data){
+/**
+ Evaluates the area of the two dimensional convex polyhedron
+ H(a) with a = [x,1-x],
+ where brackets denote vector concatenation.
+ This polyhedron has width one, provided 0<= x <= 1, and the points involved in the polyhedron definition have unit norm
+ and obey pts[n+i] = -pts[i]
+ 
+ See the class Minkowski_2::Functional for the definition of H(a). (An instance  is passed as an opaque third argument.)
+ 
+ Input :
+  - x, vector defining the convex polyhedron shape.
+  - data, an appropriate Minkowski_2::Functional  instance.
+ Output :
+  - grad, the gradient of Area( H( [x,1-x] ) ) with respect to x.
+ Return value : Area( H( [x,1-x] ) )
+ */
+ScalarType EvaluateVolume(const std::vector<ScalarType> & x,
+						  std::vector<ScalarType> & grad, void * data){
     Minkowski_2::Functional & mink = *static_cast<Minkowski_2::Functional*>(data);
     const int n=mink.Size()/2;
     N::VectorType input = N::EigenFromStd(x);
@@ -55,6 +72,16 @@ ScalarType EvaluateVolume(const std::vector<ScalarType> & x, std::vector<ScalarT
     
     return mink.Area();
 }
+
+/**
+ Evaluates the opposite of the geometric mean of the edge lengths of the two dimensional convex polyhedron
+ H( [x,1-x] ),
+ see the definition of EvaluateVolume for details. Also returns the gradient.
+ 
+ We thus encode a large number of (strict) positivity constraints into a single (strict) positivity constraint, using the geometric
+ mean. Note that this may be regarded Bad Practice from the optimization standpoint, but it simplifies the interface, and the
+ nlopt optimizer appears to be robust enough to handle it. 
+ */
 
 ScalarType EvaluateConstraint(const std::vector<ScalarType> & x, std::vector<ScalarType> & grad, void * data){
     Minkowski_2::Functional & mink = *static_cast<Minkowski_2::Functional*>(data);

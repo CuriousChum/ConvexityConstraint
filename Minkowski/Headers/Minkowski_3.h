@@ -26,11 +26,16 @@ namespace Minkowski_3 {
     }
     
     namespace CGT {
+	/**CGAL points by default do not carry an index, but this  is needed in a number of settings.
+	 There are two workarounds (both used here actually) :
+	  - Use an std::map<Point,int>. This works since CGAL never rounds or otherwise modifies the input points. However, there is a small computational overhead.
+	  - Define your own class that carries an index, which is the approach used here. In fact this approach is described in the CGAL manual. The syntax is a bit obscure but it works.
+	 */
         typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
         typedef K::Point_3 Point;
         typedef K::Vector_3 Vector;
         
-        // A vertex type with an index
+        // A CGAL-compatible vertex type with an index
         template <class Refs>
         struct My_vertex : public CGAL::HalfedgeDS_vertex_base<Refs, CGAL::Tag_true, Point> {
             typedef CGAL::HalfedgeDS_vertex_base<Refs, CGAL::Tag_true, Point> superclass;
@@ -51,6 +56,21 @@ namespace Minkowski_3 {
     }
     
     struct Functional : N::FunctionalBase {
+		/**
+		 Computes the lengths of the edges of the three dimensional polyhedron defined by the linear inequality constraints
+		 H(a) = {z in R^3; < z, pts[i] >  <= a[i] for all indices i}
+		 The "pts" are fixed, and the heights "a" are meant to be optimized.
+		 When these areas are equal to a given value, the Minkowski problem is solved.
+		 
+		 We rely on CGAL to compute the dual convex K(a) body to H(a), using a convex hull procedure.
+		 K(a) = Hull {pts[i]/a[i] for all indices i}
+		 
+		 Note the translation invariance H(a) + u = H( a[i] + <u,pts[i]>; 0<= i < I ) for any vector u in R^3,
+		 hence Area (H(a)) = Area( H( a[i] + <u,pts[i]>; 0<= i < I ) ).
+		 
+		 See Minkowski_2:Functional for a similar but simpler class.
+		 */
+
         enum class ErrCode {NoError=0,InteriorPoints,NonPositiveEntries};
         
         virtual int Compute(N::VectorType &, N::VectorType &);
@@ -70,10 +90,11 @@ namespace Minkowski_3 {
         CGT::Polyhedron poly;
         CGT::Vector Point(int i) const;
         
-        ScalarType volume;
+        ScalarType volume; // Lebesgue volume of H(a)
         N::VectorType facetAreas; // area gradient
         std::vector<N::Triplet> jacobian; // area jacobian
-        G::Vector moment;
+		
+        G::Vector moment; // Moment of H(a), i.e. the integral of position.
         G::VectorList facetMoments; // moment gradient
         
         ErrCode MakeHull(const N::VectorType &);

@@ -1,15 +1,12 @@
 //
-//  Minkowski_2_Test.h
+//  Minkowski_2_Test.cpp
 //  Minkowski
 //
 //  Created by Jean-Marie Mirebeau on 03/09/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
 
-#ifndef Minkowski_Minkowski_2_Test_h
-#define Minkowski_Minkowski_2_Test_h
-
-#include "Minkowski_2.h"
+#include "Headers/Minkowski_2.h"
 
 namespace Minkowski_2_Test {
     using namespace Minkowski_2;
@@ -103,5 +100,8 @@ namespace Minkowski_2_Test {
     
 }
 
+int main(int argc, const char * argv[]) {
 
-#endif
+    Minkowski_2_Test::Test2(); 
+
+}

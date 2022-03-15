@@ -1,16 +1,13 @@
 //
-//  Minkowski_3_Test.h
+//  Minkowski_3_Test.cpp
 //  Minkowski
 //
 //  Created by Jean-Marie Mirebeau on 03/09/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
 
-#ifndef Minkowski_Minkowski_3_Test_h
-#define Minkowski_Minkowski_3_Test_h
-
 #include <fstream>
-#include "Minkowski_3.h"
+#include "Headers/Minkowski_3.h"
 
 
 namespace Minkowski_3_Test {
@@ -163,5 +160,9 @@ namespace Minkowski_3_Test {
     
 }
 
+int main(int argc, const char * argv[]) {
 
-#endif
+    Minkowski_3_Test::Test1();
+    
+//    Minkowski_3_Test::MinkowskiInterpolate({&Minkowski_3_Test::octahedronEqns, &Minkowski_3_Test::tetraEqns},30);
+}
