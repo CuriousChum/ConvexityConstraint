@@ -3,7 +3,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/../common.cmake)
 
-project(Minkowski)
+project(Meissner)
 
 set(HeadersDir ${CMAKE_CURRENT_SOURCE_DIR}/Headers)
 set(Project_Headers
@@ -33,5 +33,6 @@ add_executable(Minkowski_3 "Minkowski_3_Test.cpp")
 add_executable(Meissner_2 "Meissner_2_Test.cpp")
 add_executable(Meissner_3 "Meissner_3_Test.cpp")
 
+target_link_libraries(Minkowski_3 ${GmpLib})
 target_link_libraries(Meissner_2 ${GmpLib} ${NloptLib})
 target_link_libraries(Meissner_3 ${GmpLib} ${NloptLib})

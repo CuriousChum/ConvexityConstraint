@@ -3,9 +3,10 @@ channels:
   - conda-forge
 #  - plotly
 dependencies:
+ - python=3.6
+ - nlopt=2.4.2
  - eigen
  - cgal
- - nlopt
 #  - python
 #  - matplotlib
 #  - notebook

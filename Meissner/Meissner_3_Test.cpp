@@ -10,16 +10,26 @@
 #include "Headers/Meissner_3.h"
 #include "nlopt.hpp"
 
+
 namespace Meissner_3_Test {
     using namespace Meissner_3;
     typedef N::VectorType NV;
     
     
-    void Test1(int subdivision, ScalarType stopval = 0.4197){
-        const ScalarType delta=0.02;
+    void OptimizeMeissner3(int subdivision, ScalarType stopval = 0.4197){
+		std::cout << "Numerical optimization of Meissner problem "
+		<< " using point set number " << subdivision << std::endl;
+		
+		std::string filename = "HalfPts_"+std::to_string(subdivision)+".txt";
         std::ifstream is;
-        is.open("HalfPts_"+std::to_string(subdivision)+".txt");
+        is.open(filename);
         
+		if(!is.is_open()){
+			std::cout << "Error !! Could not open file " << filename << ".\n"
+			<< "This file is likely in the ConvexityConstraint/Minkowski/data folder of the code repo. (Otherwise, it can be generated with the ConvexityConstraint/Minkowski/HalfPts.nb notebook). The file must be copied to the same folder as the compiled executable.\n";
+			return;
+		}
+		
         int n,checkDim;
         is >> n;
         is >> checkDim;
@@ -44,6 +54,15 @@ namespace Meissner_3_Test {
             << "\n";
         }
         
+		/* Initialization of the optimization.
+		 The initialization must be such that all the facets are non-empty.
+		 Depending on the initialization, the optimization may be attracted by one or the other of Meissner's (conjecturedly optimal) bodies.
+		 */
+		
+		// Modifying this parameter (e.g. flipping the sign) is sometimes enough so that
+		// the numerica optimizer is attracted to one or the other of Meissner bodies.
+		const ScalarType delta=-0.02;
+		
         Eigen::Matrix<ScalarType,4,3> tetra;
         tetra <<
         0.,0.,-1.,
@@ -63,9 +82,6 @@ namespace Meissner_3_Test {
         
         
         {
-//            for(int i=0; i<2*n; ++i)
-//                std::cout << pts.col(i) << "\n\n";
-            
             NV input(2*n), output(2*n);
             for(int i=0; i<n; ++i){
                 input[i]=x[i];
@@ -91,7 +107,10 @@ namespace Meissner_3_Test {
         
         ScalarType minimum;
         std::cout << "Opt begin\n";
-        nlopt::result result = algo.optimize(x,minimum);
+		nlopt::result result;
+		try {result = algo.optimize(x,minimum);}
+		catch(nlopt::roundoff_limited & e){
+			std::cout << "Caught roundoff_limited exception\n";}
         std::cout << "Opt end\n";
         
         std::ofstream os; os.open("Meissner_3_"+std::to_string(subdivision)+".txt");
@@ -109,21 +128,16 @@ namespace Meissner_3_Test {
 }
 
 int main(int argc, const char * argv[]) {
-    /*
-    if(argc>1){
-        const int i= atoi(argv[1]);
-        std::cout << i << std::endl;
-        
-        double stopVal = 0.4197;
-        if(argc>2) stopVal = atof(argv[2]);
-        
-        if(2<=i && i<=10)
-            Meissner_3_Test::Test1(i,stopVal);
-    }
- */
     
-    for(int i=5; i<10; ++i)
-        Meissner_3_Test::Test1(i);
-
+        
+	int i=4;
+	if(argc>1) i=atoi(argv[1]);
+	
+	double stopVal = 0.4197;
+	if(argc>2) stopVal = atof(argv[2]);
+	
+	if(i>0) Meissner_3_Test::OptimizeMeissner3(i,stopVal);
+	else {for(i=2;i<=7;++i) Meissner_3_Test::OptimizeMeissner3(i,stopVal);}
+	
     return 0;
 }

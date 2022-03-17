@@ -13,7 +13,18 @@
 #include <functional>
 
 namespace QuotientedNewton {
-    
+    /**
+	 Turn a large number of positivity constraints, with a sparse jacobian, into a single positivity constraint
+	 (defined as the geometric mean), with a dense gradient.
+	 Not very good practice, but useful for some optimization routines which cannot deal with sparse constraint jacobians.
+	 
+	 Input :
+	  -  x : an array of positive values
+	  - jac : a vector of triplets, representing the sparse jacobian of x
+	 Output :
+	  - return value : the geometric mean of the entries of x
+	  - grad : the first order expansion of the geometric mean.
+	 */
     ScalarType ConstraintsProduct(const VectorType & x, const std::vector<Triplet> & jac,
                                   VectorType & grad){
         const int n=(int)x.size();

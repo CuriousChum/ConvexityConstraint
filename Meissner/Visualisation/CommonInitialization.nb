@@ -1,0 +1,243 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      8172,        235]
+NotebookOptionsPosition[      7809,        217]
+NotebookOutlinePosition[      8169,        233]
+CellTagsIndexPosition[      8126,        230]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Common initialization.", "Title",
+ CellChangeTimes->{{3.8564388076408052`*^9, 3.856438826823881*^9}}],
+
+Cell["\<\
+Please make sure the following cell is executed, with the correct binary \
+path, before running the other visualization notebooks of this directory.\
+\>", "Text",
+ CellChangeTimes->{{3.8564388215374193`*^9, 3.8564388629211693`*^9}, {
+  3.856454515940196*^9, 3.85645453009765*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{
+   "MinkowskiBinDirectory", " ", "=", " ", 
+    "\"\</Users/mirebeau/bin/ConvexityConstraint/Release\>\""}], ";"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"!!", " ", 
+    RowBox[{"To", " ", 
+     RowBox[{"user", " ", "!!"}], " ", "Update", " ", "this", " ", "binary", 
+     " ", 
+     RowBox[{"path", " ", "!"}]}]}], "*)"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"ImportFromTxt", "[", "filePath_", "]"}], ":=", " ", 
+    RowBox[{"ToExpression", "[", 
+     RowBox[{"StringReplace", "[", 
+      RowBox[{
+       RowBox[{"Import", "[", "filePath", "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"\"\<e+\>\"", "\[Rule]", "\"\<*10^\>\""}], ",", " ", 
+         RowBox[{"\"\<e-\>\"", "\[Rule]", "\"\<*10^-\>\""}], ",", 
+         RowBox[{"\"\<,}\>\"", "\[Rule]", "\"\<}\>\""}], ",", 
+         RowBox[{"\"\<inf\>\"", "\[Rule]", "\"\<Infinity\>\""}]}], "}"}]}], 
+      "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+    "This", " ", "function", " ", "computes", " ", "the", " ", "dual", " ", 
+     "convex", " ", "body"}], ",", " ", 
+    RowBox[{"to", " ", "a", " ", "given", " ", "convex", " ", "body"}], ",", 
+    " ", 
+    RowBox[{
+     RowBox[{"in", " ", "dimension", " ", "d"}], "=", "3."}]}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"DualPolytope", "[", 
+   RowBox[{"GraphicsComplex", "[", 
+    RowBox[{"pts_", ",", 
+     RowBox[{"Polygon", "[", "faces_", "]"}]}], "]"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+     "dualPts", ",", "edges", ",", " ", "dualEdges", ",", "Cycle", ",", 
+      "dualFaces"}], "\[IndentingNewLine]", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"dualPts", " ", "=", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"Inverse", "[", 
+          RowBox[{"pts", "[", 
+           RowBox[{"[", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", 
+              RowBox[{"1", ";;", "3"}], "]"}], "]"}], " ", "]"}], "]"}], " ", 
+          "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "1", ",", "1"}], "}"}]}], "&"}], "/@", 
+       "faces"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"edges", "=", 
+      RowBox[{"Table", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Module", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"f", "=", 
+             RowBox[{"faces", "[", 
+              RowBox[{"[", "i", "]"}], "]"}]}], ",", "n"}], "}"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"n", "=", 
+            RowBox[{"Length", "@", "f"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"Table", "[", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"f", "[", 
+                 RowBox[{"[", "j", "]"}], "]"}], ",", 
+                RowBox[{"f", "[", 
+                 RowBox[{"[", 
+                  RowBox[{"1", "+", 
+                   RowBox[{"Mod", "[", 
+                    RowBox[{"j", ",", "n"}], "]"}]}], " ", "]"}], "]"}]}], 
+               "}"}], "\[Rule]", "i"}], "\[IndentingNewLine]", ",", 
+             RowBox[{"{", 
+              RowBox[{"j", ",", "n"}], "}"}]}], "]"}]}]}], " ", "]"}], 
+        "\[IndentingNewLine]", ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", 
+          RowBox[{"Length", "@", "faces"}]}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"edges", "=", 
+      RowBox[{"Join", "@@", "edges"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"dualEdges", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"Last", "@", "rule"}], ",", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"Reverse", "@", 
+              RowBox[{"First", "@", "rule"}]}], ")"}], "/.", "edges"}]}], 
+          "}"}], "\[Rule]", " ", 
+         RowBox[{"First", "@", 
+          RowBox[{"First", "@", "rule"}]}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"rule", ",", "edges"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"dualEdges", "=", 
+      RowBox[{"GatherBy", "[", 
+       RowBox[{"dualEdges", ",", "Last"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"dualEdges", "=", 
+      RowBox[{"Sort", "[", 
+       RowBox[{"dualEdges", ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Last", "@", 
+           RowBox[{"First", "@", "#1"}]}], "<", 
+          RowBox[{"Last", "@", 
+           RowBox[{"First", "@", "#2"}]}]}], "&"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"dualEdges", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"#", "/.", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"i_", ",", "j_"}], "}"}], "\[Rule]", "u_"}], ")"}], 
+           "\[Rule]", 
+           RowBox[{"(", 
+            RowBox[{"i", "\[Rule]", "j"}], ")"}]}]}], ")"}], "&"}], "/@", 
+       "dualEdges"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Cycle", "[", "l_", "]"}], ":=", 
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"cycle", "=", 
+          RowBox[{"{", 
+           RowBox[{"First", "@", 
+            RowBox[{"First", "@", "l"}]}], "}"}]}], "}"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"While", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"Last", "@", "cycle"}], "/.", "l"}], ")"}], " ", 
+            "\[NotEqual]", 
+            RowBox[{"First", "@", "cycle"}]}], ",", 
+           RowBox[{"AppendTo", "[", 
+            RowBox[{"cycle", ",", 
+             RowBox[{
+              RowBox[{"Last", "@", "cycle"}], "/.", "l"}]}], "]"}]}], "]"}], 
+         ";", "\[IndentingNewLine]", "cycle"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"dualFaces", "=", 
+      RowBox[{"Cycle", "/@", "dualEdges"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"GraphicsComplex", "[", 
+      RowBox[{"dualPts", ",", 
+       RowBox[{"Polygon", "[", "dualFaces", "]"}]}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.856438738116683*^9, 3.8564387974582033`*^9}, {
+  3.856454511945738*^9, 3.856454562077199*^9}, {3.856454733981947*^9, 
+  3.856454735994308*^9}, {3.8564548409865513`*^9, 3.856454842089643*^9}, {
+  3.856455051109378*^9, 3.85645508179403*^9}, {3.856455121899662*^9, 
+  3.856455127801244*^9}}]
+}, Open  ]]
+},
+WindowSize->{917, 878},
+WindowMargins->{{24, Automatic}, {Automatic, 122}},
+FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September \
+21, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 107, 1, 92, "Title"],
+Cell[690, 25, 290, 5, 49, "Text"],
+Cell[983, 32, 6810, 182, 705, "Input"]
+}, Open  ]]
+}
+]
+*)
+

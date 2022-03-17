@@ -9,6 +9,13 @@
 #include <fstream>
 #include "Headers/Minkowski_3.h"
 
+/**
+This file contains some undocumented validation tests for the Minkowski problem in three dimensions :
+find a convex body whose facets areas have a given distribution.
+ 
+Please contact the author for details in case of need.
+*/
+
 
 namespace Minkowski_3_Test {
     using namespace Minkowski_3;
@@ -148,14 +155,16 @@ namespace Minkowski_3_Test {
 //            std::cout << target << "\n\n";
             x.setConstant(1);
             solver.Solve(op,target,x);
+			os << i << "->{"
+			ExportArrayArrow(N::StdFromEigen(x))
+			<< "},";
+			/*
             os << i << "->";
             print_container(os,N::StdFromEigen(x));
-            os << ",";
+            os << ",";*/
 
         }
         os << "}";
-        
-
     }
     
 }
