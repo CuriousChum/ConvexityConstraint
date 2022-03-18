@@ -6,22 +6,22 @@
 //#include "ConvexityConstraint_Test.hxx"
 
 
-//#include "Regular_Test.h"
+#include "Regular_Test.h"
 
 //#include "DGO_CallTest.h"
-/*
+
 #include "NewtonSolvers_Test.h"
 #include "PrincipalAgent_Test.h"
 #include "Geometry_2.h"
-*/
 
-/*
+
+
 #include "LipschitzConstraint.h"
 #include "ConvexityConstraint.h"
 #include "PrincipalAgent.h"
 #include "PrincipalAgent_Test.h"
 #include "PrincipalAgent_NLOpt.h"
- */
+ 
 
 
 #include "Geometry_3.h"

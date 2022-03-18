@@ -11,9 +11,10 @@
 
 #include <fstream>
 
+#include "JMM_CPPLibs/Output/EnumToString.h"
+
 #include "PrincipalAgent.h"
 #include "ConvexityConstraint.h"
-#include "EnumToString.h"
 #include "LipschitzConstraint.h"
 
 namespace PrincipalAgent_Test {enum class ShapeType {Square, Triangle, Circle}; }

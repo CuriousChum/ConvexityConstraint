@@ -103,11 +103,9 @@ std::ostream & operator << (std::ostream & os, const CGT::RT & rt){
         
 	
         os << "{";
-		for(auto it=indices.begin(); it!=indices.end(); ++it) os<<*it;
-//        print_range(os,indices.begin(),indices.end());
+        print_range(os,indices.begin(),indices.end());
         os << ",";
-		for(auto it=grad.cartesian_begin(); it!=grad.cartesian_end(); ++it) os<<*it;
-//        print_range(os,grad.cartesian_begin(),grad.cartesian_end());
+        print_range(os,grad.cartesian_begin(),grad.cartesian_end());
         os << "},";
     }
     
