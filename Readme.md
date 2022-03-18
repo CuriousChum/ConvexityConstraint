@@ -20,3 +20,15 @@ The following open source libraries are needed to compile the provided code. The
 Optionally, the Mathematica(R) software can be used to visualize the results, see the provided notebooks.
 
 ## Installation
+
+
+<!---
+Original Meissner code : 
+/Users/mirebeau/Dropbox/Programmes/2015/9_Septembre/Minkowski 
+
+Original Principal agent C++ code : 
+/Users/mirebeau/Dropbox/Programmes/2015/1_Janvier/OptimizationTests/CGalTest
+
+Original Principal agent visualization code : 
+/Users/mirebeau/Dropbox/Shared/Quentin/SubgradientBarrier/Mathematica
+--->

@@ -17,6 +17,9 @@ set(CondaDir ${Conda_ConvexityConstraint_Env_Dir})
 set(CMAKE_PREFIX_PATH ${CondaDir})
 find_package(CGAL)
 
+Set(CgalLib "${CondaDir}/lib/libCGAL.dylib")
+
+
 # NLOPT
 Set(NloptLib "${CondaDir}/lib/libnlopt.dylib")
 

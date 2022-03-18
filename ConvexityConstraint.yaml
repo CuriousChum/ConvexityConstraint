@@ -1,24 +1,8 @@
 name: ConvexityConstraint
 channels:
   - conda-forge
-#  - plotly
 dependencies:
  - python=3.6
- - nlopt=2.4.2
+ - cgal=4.9 # Compatibility was broken since original code in 2015
+ - nlopt=2.4.2 # Somehow works better for my application
  - eigen
- - cgal
-#  - python
-#  - matplotlib
-#  - notebook
-#  - scipy
-#  - conda-build
-#  - conda-verify
-#  - anaconda-client
-#  - nbformat
-#  - nbdime
-#  - ffmpeg
-#  - cudatoolkit
-#  - cupy
-#  - plotly
-#  - pip
-#  - ipywidgets
