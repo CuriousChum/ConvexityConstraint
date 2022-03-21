@@ -1,3 +1,4 @@
+#pragma once
 //
 //  PrincipalAgent.hxx
 //  CGalTest
@@ -5,9 +6,6 @@
 //  Created by Jean-Marie Mirebeau on 29/01/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
-
-#ifndef CGalTest_PrincipalAgent_hxx
-#define CGalTest_PrincipalAgent_hxx
 
 void PrincipalAgent::MakeObjective(){
     terms.constant=0;
@@ -164,5 +162,3 @@ std::vector<CGT::Full_point> PrincipalAgent::Pts() const {
         return p.second.index < q.second.index;});
     return pts;
 }
-
-#endif

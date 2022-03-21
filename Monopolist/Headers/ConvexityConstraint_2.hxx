@@ -1,13 +1,11 @@
+#pragma once
 //
-//  ConvexityConstraint.hxx
+//  ConvexityConstraint_2.hxx
 //  CGalTest
 //
 //  Created by Jean-Marie Mirebeau on 28/01/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
-
-#ifndef CGalTest_ConvexityConstraint_hxx
-#define CGalTest_ConvexityConstraint_hxx
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%% Convexity %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -183,5 +181,3 @@ void ConvexityConstraint::PrintSelf(std::ostream & os) const {
     ConstraintType::PrintSelf(os);
     os << "}";
 }
-
-#endif

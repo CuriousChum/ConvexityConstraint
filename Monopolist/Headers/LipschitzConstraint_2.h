@@ -1,3 +1,4 @@
+#pragma once
 //
 //  LipschitzConstraint.h
 //  CGalTest
@@ -5,9 +6,6 @@
 //  Created by Jean-Marie Mirebeau on 09/09/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
-
-#ifndef CGalTest_LipschitzConstraint_h
-#define CGalTest_LipschitzConstraint_h
 
 // Implement the constraint D_x u \leq 1, D_y u \leq 1, as required by the monopolist problem.
 
@@ -135,6 +133,3 @@ namespace Geometry_2 {
  if(r & RJacobian) jacobian.push_back({i,i,1});
  }
  }*/
-
-
-#endif

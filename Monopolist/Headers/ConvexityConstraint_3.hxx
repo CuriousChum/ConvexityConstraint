@@ -1,3 +1,4 @@
+#pragma once
 //
 //  ConvexityConstraint_3.hxx
 //  CGalTest
@@ -5,9 +6,6 @@
 //  Created by Jean-Marie Mirebeau on 13/02/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
-
-#ifndef CGalTest_ConvexityConstraint_3_hxx
-#define CGalTest_ConvexityConstraint_3_hxx
 
 ConvexityConstraint::ConvexityConstraint(const std::vector<CGT::Full_point> & pts_, ScalarType degen_)
 :pts(pts_), degen(degen_) {
@@ -47,7 +45,7 @@ void ConvexityConstraint::ComputeValJacHess(FlagType r){
     
     std::vector< VecCoef > dualFacetGradient;
     
-    // Iterate over edges
+    // Iterate over edges. Each edge defines an orthogonal facet of a subgradient cell.
     for(Finite_edges_iterator eIt = rt.finite_edges_begin(), eEnd = rt.finite_edges_end();
         eIt!=eEnd; ++eIt){
         
@@ -120,7 +118,7 @@ void ConvexityConstraint::ComputeValJacHess(FlagType r){
         
         for(int orientation=0; orientation<2; ++orientation, std::swap(source,target)){
         
-            // Upon reversing orientation, eVec changes sign, but circulartion around the edge also changes. So dualFacetArea and dualFacetGradient are unchanged.
+            // Upon reversing orientation, eVec changes sign, but circulation around the edge also changes. So dualFacetArea and dualFacetGradient are unchanged.
             
             const ScalarType heightDiff = Height(target->point()) - Height(source->point());
             
@@ -168,5 +166,3 @@ void ConvexityConstraint::PrintSelf(std::ostream & os) const {
     ConstraintType::PrintSelf(os);
     os << "}";
 }
-
-#endif

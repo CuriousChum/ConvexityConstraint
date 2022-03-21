@@ -1,3 +1,4 @@
+#pragma once
 //
 //  NewtonConstrained.hxx
 //  CGalTest
@@ -5,9 +6,6 @@
 //  Created by Jean-Marie Mirebeau on 11/02/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
-
-#ifndef CGalTest_NewtonConstrained_hxx
-#define CGalTest_NewtonConstrained_hxx
 
 // %%%%%%%%%%%%%%% Functionnal interface to NLOPT %%%%%%%%%%%%%%%
 
@@ -196,7 +194,6 @@ ScalarType NewtonConstrained::Value(const VectorType & x){
 
 const VectorType & NewtonConstrained::Gradient(){
     gradient_ = objective->Gradient();
-//    std::cout << gradient_.size() << "," << barriers[0]->Gradient().size() << std::endl;
     for(auto c : barriers)
         gradient_ += multiplier * c->Gradient();
     return gradient_;
@@ -243,7 +240,7 @@ void NewtonConstrained::Solve(Functionnal & objective_,
             break;}
     }
     
-    std::cout << "Finishing optimization";
+    std::cout << "Finishing optimization.\n";
 }
 
 void NewtonConstrained::PrintSelf(std::ostream & os) const {
@@ -258,5 +255,3 @@ void NewtonConstrained::PrintSelf(std::ostream & os) const {
     << "}";
     
 }
-
-#endif

@@ -1,3 +1,4 @@
+#pragma once
 //
 //  ConvexityConstraint_Traits.hxx
 //  CGalTest
@@ -5,10 +6,6 @@
 //  Created by Jean-Marie Mirebeau on 29/01/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
-
-#ifndef CGalTest_ConvexityConstraint_Traits_hxx
-#define CGalTest_ConvexityConstraint_Traits_hxx
-
 
 // %%%%%%%%%%%%%% Coefficient types %%%%%%%%%%%%
 
@@ -363,6 +360,3 @@ void PositivityConstraint::Compute(FlagType r){
     }
     numberOfConstraints=counter;
 }*/
-
-
-#endif

@@ -29,19 +29,6 @@
 #include "ConvexityConstraint_3.h"
 #include "PrincipalAgent_3_Test.h"
 
-
-
-/*
-#include "Minkowski_3_Traits.h"
-#include "Minkowski_3_Test.h"
-#include "MinkowskiConstraint_3.h"
-*/
-
-/*#include "MinkowskiConstraint_2.h"
-#include "Minkowski_2_Test.h"
-#include "MinkowskiEnergy_2.h"
- */
-
 //#include "Refinement_2_Traits.h"
 
 int main(){

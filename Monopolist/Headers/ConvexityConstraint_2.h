@@ -1,19 +1,23 @@
+#pragma once
 //
-//  ConvexityConstraint.h
+//  ConvexityConstraint_2.h
 //  CGalTest
 //
 //  Created by Jean-Marie Mirebeau on 28/01/2015. Some from Q. Merigot.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
 
-#ifndef CGalTest_ConvexityConstraint_h
-#define CGalTest_ConvexityConstraint_h
-
 #include <vector>
 #include "Geometry_2.h"
 
 namespace Geometry_2 {
-    
+
+/**
+ This functional evaluates the area of the subgradient cells associated with all the interior discretization points.
+ Taking their logarithms, we obtain a barrier function for convexity in the domain interior.
+ 
+ The boundary points are ignored however.
+ */
 struct ConvexityConstraint : ConstraintType {
     typedef CGAL_Traits::Full_point Full_point;
     ConvexityConstraint(std::vector<Full_point> pts_):pts(pts_){};
@@ -61,8 +65,6 @@ protected:
 
 
     
-#include "ConvexityConstraint.hxx"
+#include "ConvexityConstraint_2.hxx"
 
 }
-
-#endif

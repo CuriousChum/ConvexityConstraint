@@ -1,3 +1,4 @@
+#pragma once
 //
 //  Geometry_3.hxx
 //  CGalTest
@@ -5,9 +6,6 @@
 //  Created by Jean-Marie Mirebeau on 13/02/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
-
-#ifndef CGalTest_Geometry_3_hxx
-#define CGalTest_Geometry_3_hxx
 
 ScalarType CGT::Parabola(const Point & p){
     return p[0]*p[0]+p[1]*p[1]+p[2]*p[2];
@@ -112,6 +110,3 @@ std::ostream & operator << (std::ostream & os, const CGT::RT & rt){
     os << "}}";
     return os;
 }
-
-
-#endif

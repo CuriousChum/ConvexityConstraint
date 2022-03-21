@@ -1,3 +1,4 @@
+#pragma once
 //
 //  Geometry_2.hxx
 //  CGalTest
@@ -5,9 +6,6 @@
 //  Created by Jean-Marie Mirebeau on 13/02/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
-
-#ifndef CGalTest_Geometry_2_hxx
-#define CGalTest_Geometry_2_hxx
 
 // %%%%%%%%%%%%%%% Printing %%%%%%%%%%%%%%%%%
 
@@ -139,6 +137,3 @@ namespace CGAL_Traits {
     }
     
 }
-
-
-#endif

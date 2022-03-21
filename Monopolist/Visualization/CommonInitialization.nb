@@ -1,0 +1,492 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     19038,        484]
+NotebookOptionsPosition[     18675,        466]
+NotebookOutlinePosition[     19032,        482]
+CellTagsIndexPosition[     18989,        479]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+Common initialization for visualization of the principal agent problem.\
+\>", "Title",
+ CellChangeTimes->{{3.85661444852757*^9, 3.856614468653913*^9}}],
+
+Cell["\<\
+Display numerical solutions of the principal agent problem.
+  
+Original file :  \
+/Users/mirebeau/Dropbox/Shared/Quentin/SubgradientBarrier/Mathematica/CGAL0.nb\
+\>", "Text",
+ CellChangeTimes->{{3.856614560423358*^9, 3.856614589135436*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"!!", " ", 
+    RowBox[{"To", " ", 
+     RowBox[{"user", " ", ":", " ", 
+      RowBox[{"Update", " ", "this", " ", 
+       RowBox[{"path", " ", "!!"}]}]}]}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+    "MonopolistBinDir", " ", "=", " ", 
+     "\"\</Users/mirebeau/bin/ConvexityConstraint/Monopolist/Release\>\""}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ImportFromTxt", "[", "filePath_", "]"}], ":=", " ", 
+     RowBox[{"ToExpression", "[", 
+      RowBox[{"StringReplace", "[", 
+       RowBox[{
+        RowBox[{"Import", "[", "filePath", "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<e+\>\"", "\[Rule]", "\"\<*10^\>\""}], ",", " ", 
+          RowBox[{"\"\<e-\>\"", "\[Rule]", "\"\<*10^-\>\""}], ",", 
+          RowBox[{"\"\<,}\>\"", "\[Rule]", "\"\<}\>\""}], ",", 
+          RowBox[{"\"\<inf\>\"", "\[Rule]", "\"\<Infinity\>\""}]}], "}"}]}], 
+       "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"Needs", "[", "\"\<ComputationalGeometry`\>\"", "]"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ShowCvx", "[", 
+      RowBox[{"data_", ",", 
+       RowBox[{"withVal_:", "False"}], ",", 
+       RowBox[{"withMat_:", "False"}]}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "\[IndentingNewLine]", 
+        RowBox[{
+        "rt", ",", "points", ",", "wpts", ",", "hmax", ",", "faces", ",", 
+         "superclass", ",", "jacobian", ",", "logHessian", ",", "logGrad", 
+         ",", "values", ",", "\[IndentingNewLine]", "grads", ",", "dual", ",", 
+         RowBox[{"color", "=", 
+          RowBox[{"ColorData", "[", "\"\<TemperatureMap\>\"", "]"}]}]}], 
+        "\[IndentingNewLine]", "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"rt", "=", 
+         RowBox[{"\"\<rt\>\"", "/.", "data"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"faces", "=", 
+         RowBox[{"\"\<faces\>\"", "/.", "rt"}]}], ";", "\[IndentingNewLine]", 
+        
+        RowBox[{"superclass", "=", 
+         RowBox[{"\"\<superclass\>\"", "/.", "data"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"jacobian", "=", 
+         RowBox[{"\"\<jacobian\>\"", "/.", "superclass"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"logHessian", "=", 
+         RowBox[{"\"\<logHessian\>\"", "/.", "superclass"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"logGrad", " ", "=", 
+         RowBox[{"\"\<logGrad\>\"", "/.", "superclass"}]}], ";", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{"withMat", ",", 
+          RowBox[{"Print", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"1", "+", "#1"}], ",", 
+                RowBox[{"1", "+", "#2"}]}], "}"}], "\[Rule]", "#3"}], "&"}], "@@@",
+             "logHessian"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+        "\[IndentingNewLine]", 
+        RowBox[{"jacobian", "=", 
+         RowBox[{"SparseArray", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"1", "+", "#1"}], ",", 
+               RowBox[{"1", "+", "#2"}]}], "}"}], "\[Rule]", "#3"}], "&"}], "@@@",
+            "jacobian"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"logHessian", "=", 
+         RowBox[{"SparseArray", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"1", "+", "#1"}], ",", 
+               RowBox[{"1", "+", "#2"}]}], "}"}], "\[Rule]", "#3"}], "&"}], "@@@",
+            "logHessian"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"values", "=", 
+         RowBox[{
+          RowBox[{"0.", "+", 
+           RowBox[{"(", 
+            RowBox[{"\"\<values\>\"", "/.", "superclass"}], ")"}]}], "/.", 
+          RowBox[{"inf", "\[Rule]", "Infinity"}]}]}], ";", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"(*", 
+         RowBox[{"Dual", " ", "graph"}], "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"dual", "=", 
+         RowBox[{"First", "/@", "faces"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"dual", "=", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"vertex", ",", "face"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"face", ",", "1", ",", 
+             RowBox[{"Length", "[", "dual", "]"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"vertex", ",", 
+             RowBox[{"dual", "[", 
+              RowBox[{"[", "face", "]"}], "]"}]}], " ", "}"}]}], "]"}]}], ";",
+         "\[IndentingNewLine]", 
+        RowBox[{"dual", "=", 
+         RowBox[{"Join", "@@", "dual"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"dual", "=", 
+         RowBox[{"Sort", "@", "dual"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"dual", "=", 
+         RowBox[{"Split", "[", 
+          RowBox[{"dual", ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"First", "[", "#1", "]"}], "\[Equal]", 
+             RowBox[{"First", "[", "#2", "]"}]}], "&"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"dual", "=", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Last", "/@", "#"}], "&"}], "/@", "dual"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"dual", "=", 
+         RowBox[{"Select", "[", 
+          RowBox[{"dual", ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Length", "[", "#", "]"}], "\[GreaterEqual]", "3"}], 
+            "&"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+        "\[IndentingNewLine]", 
+        RowBox[{"grads", "=", 
+         RowBox[{"Last", "/@", "faces"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"dual", "=", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"grads", "[", 
+            RowBox[{"[", "#", "]"}], "]"}], "&"}], "/@", "dual"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"dual", "=", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"With", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"h", "=", 
+               RowBox[{"ConvexHull", "[", "face", "]"}]}], "}"}], ",", 
+             RowBox[{"face", "[", 
+              RowBox[{"[", "h", "]"}], "]"}]}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"face", ",", "dual"}], "}"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"wpts", "=", 
+         RowBox[{"\"\<points\>\"", "/.", "rt"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"points", "=", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"#1", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], ",", "#3"}], "}"}], "&"}], "@@@",
+           "wpts"}]}], ";", " ", 
+        RowBox[{"points", "=", 
+         RowBox[{"Sort", "@", "points"}]}], ";", " ", 
+        RowBox[{"points", "=", 
+         RowBox[{"Last", "/@", "points"}]}], ";", " ", "\[IndentingNewLine]", 
+        
+        RowBox[{"wpts", "=", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"#3", ",", 
+             RowBox[{
+              RowBox[{"#3", ".", "#3"}], "-", "#2"}]}], "}"}], "&"}], "@@@", 
+          "wpts"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"hmax", "=", 
+         RowBox[{"Max", "[", 
+          RowBox[{"Last", "/@", "wpts"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"wpts", "=", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", " ", 
+            RowBox[{
+             RowBox[{"color", "[", 
+              RowBox[{"#2", "/", "hmax"}], "]"}], ",", 
+             RowBox[{"Point", "@", "#1"}]}], "}"}], "&"}], "@@@", "wpts"}]}], 
+        ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"(*", 
+         RowBox[{
+          RowBox[{"m", "=", 
+           RowBox[{"logHessian", "+", 
+            RowBox[{"Transpose", "[", "logHessian", "]"}], "-", 
+            RowBox[{"DiagonalMatrix", "[", 
+             RowBox[{"Diagonal", "[", "logHessian", "]"}], "]"}]}]}], ";"}], 
+         "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"If", "[", 
+           RowBox[{"withVal", ",", 
+            RowBox[{"{", 
+             RowBox[{
+             "\"\<\\nvalues, gradients\\n\>\"", ",", "values", ",", 
+              "logGrad"}], "}"}]}], "]"}], ",", "\[IndentingNewLine]", 
+          "\"\<\\nEigenvalues,lowest and biggest\\n\>\"", ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Eigenvalues", "[", 
+           RowBox[{"logHessian", ",", 
+            RowBox[{"-", "20"}]}], "]"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"Eigenvalues", "[", 
+           RowBox[{"logHessian", ",", "20"}], "]"}], ",", 
+          "\[IndentingNewLine]", "\[IndentingNewLine]", 
+          "\"\<\\nMax Hessian Coef, gradient\\n\>\"", ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Max", "[", "logHessian", "]"}], ",", 
+          "\[IndentingNewLine]", 
+          "\"\<\\npoints,triangulation,hessian,jacobian\\n\>\"", ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Graphics", "[", 
+           RowBox[{"wpts", ",", 
+            RowBox[{"ImageSize", "\[Rule]", "200"}]}], "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Graphics", "[", 
+           RowBox[{"Table", "[", 
+            RowBox[{
+             RowBox[{"Text", "[", 
+              RowBox[{"i", ",", 
+               RowBox[{"points", "[", 
+                RowBox[{"[", "i", "]"}], "]"}]}], " ", "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"i", ",", 
+               RowBox[{"Length", "[", "points", "]"}]}], "}"}]}], "]"}], 
+           "]"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"Graphics", "[", 
+           RowBox[{
+            RowBox[{"Point", "/@", "points"}], ",", 
+            RowBox[{"ImageSize", "\[Rule]", "200"}]}], "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Graphics", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"{", 
+              RowBox[{"Transparent", ",", 
+               RowBox[{"EdgeForm", "[", "Black", "]"}], ",", 
+               RowBox[{"Table", "[", 
+                RowBox[{
+                 RowBox[{"Polygon", "[", 
+                  RowBox[{"points", "[", 
+                   RowBox[{"[", 
+                    RowBox[{"1", "+", "f"}], "]"}], "]"}], "]"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{"f", ",", 
+                   RowBox[{"First", "/@", "faces"}]}], "}"}]}], "]"}]}], 
+              "}"}], "}"}], ",", 
+            RowBox[{"ImageSize", "\[Rule]", "200"}]}], "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Graphics", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{"Point", "[", 
+               RowBox[{"Last", "[", "#", "]"}], "]"}], "&"}], "/@", "faces"}],
+             ",", 
+            RowBox[{"ImageSize", "\[Rule]", "200"}]}], "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Graphics", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"Transparent", ",", 
+              RowBox[{"EdgeForm", "[", "Black", "]"}], ",", 
+              RowBox[{"Polygon", "/@", "dual"}]}], "}"}], ",", 
+            RowBox[{"ImageSize", "\[Rule]", "200"}], ",", 
+            RowBox[{"AxesOrigin", "\[Rule]", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0"}], "}"}]}], ",", 
+            RowBox[{"Axes", "\[Rule]", "True"}]}], " ", "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"ArrayPlot", "[", 
+           RowBox[{"logHessian", ",", 
+            RowBox[{"ImageSize", "\[Rule]", "200"}]}], "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"ArrayPlot", "[", 
+           RowBox[{"jacobian", ",", 
+            RowBox[{"ImageSize", "\[Rule]", "200"}]}], "]"}]}], 
+         "\[IndentingNewLine]", "}"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ShowPA", "[", "data_", "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"rt", "=", 
+          RowBox[{"\"\<rt\>\"", "/.", "data"}]}], ",", "points", ",", 
+         "faces"}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"points", "=", 
+         RowBox[{"\"\<points\>\"", "/.", "rt"}]}], ";", 
+        RowBox[{"points", "=", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"#1", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], ",", "#3"}], "}"}], "&"}], "@@@",
+           "points"}]}], ";", " ", 
+        RowBox[{"points", "=", 
+         RowBox[{"Sort", "@", "points"}]}], ";", " ", 
+        RowBox[{"points", "=", 
+         RowBox[{"Last", "/@", "points"}]}], ";", " ", "\[IndentingNewLine]", 
+        
+        RowBox[{"faces", "=", 
+         RowBox[{"\"\<faces\>\"", "/.", "rt"}]}], ";", 
+        RowBox[{"faces", "=", 
+         RowBox[{
+          RowBox[{"#1", "&"}], "@@@", "faces"}]}], ";", 
+        RowBox[{"faces", "=", 
+         RowBox[{"1", "+", "faces"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Graphics", "[", 
+         RowBox[{"{", 
+          RowBox[{"Transparent", ",", 
+           RowBox[{"EdgeForm", "[", "Black", "]"}], ",", 
+           RowBox[{"GraphicsComplex", "[", 
+            RowBox[{"points", ",", 
+             RowBox[{"Polygon", "[", "faces", "]"}]}], "]"}]}], "}"}], 
+         "]"}]}]}], "\[IndentingNewLine]", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ShowCons", "[", "data_", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"points", ",", "constraints"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"points", "=", 
+        RowBox[{"\"\<points\>\"", "/.", 
+         RowBox[{"(", 
+          RowBox[{"\"\<rt\>\"", "/.", 
+           RowBox[{"(", 
+            RowBox[{"\"\<pa\>\"", "/.", "data"}], ")"}]}], ")"}]}]}], ";", 
+       RowBox[{"points", "=", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"#1", "[", 
+             RowBox[{"[", "1", "]"}], "]"}], ",", "#3"}], "}"}], "&"}], "@@@",
+          "points"}]}], ";", " ", 
+       RowBox[{"points", "=", 
+        RowBox[{"Sort", "@", "points"}]}], ";", " ", 
+       RowBox[{"points", "=", 
+        RowBox[{"Last", "/@", "points"}]}], ";", " ", "\[IndentingNewLine]", 
+       RowBox[{"constraints", "=", 
+        RowBox[{"\"\<constraints\>\"", "/.", 
+         RowBox[{"(", 
+          RowBox[{"\"\<lip\>\"", "/.", "data"}], ")"}]}]}], ";", 
+       RowBox[{"constraints", "=", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"1", "+", "#1"}], ",", 
+            RowBox[{"1", "+", "#2"}], ",", "#3"}], "}"}], "&"}], "@@@", 
+         "constraints"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"Graphics", "[", 
+        RowBox[{"{", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"Point", "/@", "points"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"(*", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Arrow", "[", 
+              RowBox[{"points", "[", 
+               RowBox[{"[", 
+                RowBox[{"{", 
+                 RowBox[{"#2", ",", "#1"}], "}"}], "]"}], "]"}], " ", "]"}], 
+             "&"}], "@@@", "constraints"}], "*)"}], "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"Arrow", "[", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"points", "[", 
+                RowBox[{"[", "#2", "]"}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"points", "[", 
+                 RowBox[{"[", "#2", "]"}], "]"}], "+", 
+                RowBox[{
+                 RowBox[{"Normalize", "[", 
+                  RowBox[{
+                   RowBox[{"points", "[", 
+                    RowBox[{"[", "#1", "]"}], "]"}], "-", 
+                   RowBox[{"points", "[", 
+                    RowBox[{"[", "#2", "]"}], "]"}]}], "]"}], "*", "#3"}]}]}],
+               "}"}], "]"}], "&"}], "@@@", "constraints"}]}], 
+         "\[IndentingNewLine]", "}"}], "]"}]}]}], "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{"points", ",", "constraints"}], "]"}], ";"}], "*)"}], 
+     "\[IndentingNewLine]", "]"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.6506208290579557`*^9, 3.650620940702838*^9}, {
+   3.6506209792800837`*^9, 3.650621035590554*^9}, {3.650794576681533*^9, 
+   3.650794580440733*^9}, {3.650794657879362*^9, 3.650794748920055*^9}, {
+   3.650794796628632*^9, 3.6507949844256277`*^9}, {3.650795079175344*^9, 
+   3.650795158331512*^9}, 3.85661432914116*^9, {3.8566143919231367`*^9, 
+   3.856614394710495*^9}, {3.856614602737438*^9, 3.8566146126488028`*^9}, {
+   3.8566146453790007`*^9, 3.856614652860072*^9}, {3.856614938395702*^9, 
+   3.856614940912088*^9}, {3.856614993071085*^9, 3.856615032923571*^9}, {
+   3.856616015351883*^9, 3.856616020053938*^9}, {3.8566162879753323`*^9, 
+   3.856616288116651*^9}, {3.856618898471385*^9, 3.856618899763332*^9}, {
+   3.856841810838624*^9, 3.856841851825884*^9}}]
+}, Open  ]]
+},
+WindowSize->{857, 878},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September \
+21, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 161, 3, 148, "Title"],
+Cell[744, 27, 250, 6, 68, "Text"],
+Cell[997, 35, 17662, 428, 1965, "Input"]
+}, Open  ]]
+}
+]
+*)
+

@@ -130,4 +130,14 @@ namespace PrincipalAgent_Test {
 
 }
 
+
+int main(int argc, const char * argv[]){
+
+	PrincipalAgent_Test::PALinear2(PrincipalAgent_Test::MakeShape(10,PrincipalAgent_Test::ShapeType::Square),
+								  1, "PARef2_Square_Linear");
+	
+    PrincipalAgent_Test::PA_NLOpt_0(10);
+}
+
+
 #endif

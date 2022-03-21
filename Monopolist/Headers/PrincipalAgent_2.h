@@ -50,7 +50,7 @@ protected:
     // sqrt(h_T) \| [grad u] \|_{L^2(\partial T)} . Estimator for H1 approx error.
 };
     
-#include "PrincipalAgent.hxx"
+#include "PrincipalAgent_2.hxx"
     
 }
 

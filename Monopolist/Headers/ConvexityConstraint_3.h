@@ -1,3 +1,4 @@
+#pragma once
 //
 //  ConvexityConstraint_3.h
 //  CGalTest
@@ -6,9 +7,6 @@
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
 
-#ifndef CGalTest_ConvexityConstraint_3_h
-#define CGalTest_ConvexityConstraint_3_h
-
 #include "Geometry_3.h"
 
 namespace Geometry_3 {
@@ -16,7 +14,7 @@ namespace Geometry_3 {
     struct ConvexityConstraint : ConstraintType {
         
         // Put weights (! not heights) at zero.
-        ConvexityConstraint(const std::vector<CGT::Full_point> &, ScalarType = 1e-8);
+        ConvexityConstraint(const std::vector<CGT::Full_point> &, ScalarType degen = 1e-8);
         
         virtual void SetValues(const std::vector<ScalarType> &);
         // To do : update regular triangulation with new heights by edge flipping ?
@@ -34,5 +32,3 @@ namespace Geometry_3 {
     
 #include "ConvexityConstraint_3.hxx"
 }
-
-#endif

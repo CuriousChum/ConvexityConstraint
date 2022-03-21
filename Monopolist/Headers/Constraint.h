@@ -1,3 +1,4 @@
+#pragma once
 //
 //  Constraint.h
 //  CGalTest
@@ -5,9 +6,6 @@
 //  Created by Jean-Marie Mirebeau on 29/01/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
-
-#ifndef CGalTest_Constraint_h
-#define CGalTest_Constraint_h
 
 #include <vector>
 #include <limits>
@@ -97,5 +95,3 @@ namespace Constraint {
 
 #include "Constraint.hxx"
 }
-
-#endif

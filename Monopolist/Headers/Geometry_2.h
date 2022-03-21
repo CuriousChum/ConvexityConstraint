@@ -1,3 +1,4 @@
+#pragma once
 //
 //  Geometry_2.h
 //  CGalTest
@@ -5,9 +6,6 @@
 //  Created by Jean-Marie Mirebeau on 13/02/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
-
-#ifndef CGalTest_Geometry_2_h
-#define CGalTest_Geometry_2_h
 
 #include "Constraint.h"
 
@@ -84,6 +82,3 @@ namespace Geometry_2 {
 #include "Geometry_2.hxx"
     
 }
-
-
-#endif

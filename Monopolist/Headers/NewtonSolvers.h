@@ -1,3 +1,4 @@
+#pragma once
 //
 //  NewtonSolvers.h
 //  CGalTest
@@ -5,9 +6,6 @@
 //  Created by Jean-Marie Mirebeau on 11/02/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
-
-#ifndef CGalTest_NewtonSolvers_h
-#define CGalTest_NewtonSolvers_h
 
 // Optimizing functionnals with and without constraints, with a basic Newton algorithm and logarithmic barriers.
 // (I know that I am reinventing the wheel, but it is surprisingly difficult to find optimizers,
@@ -28,7 +26,7 @@
 namespace NewtonSolvers {
 //    using namespace ConvexityConstraint_Traits; // Just for Scalar, Index, MatCoef
     
-    // Linear systems solved with Eigen. (Basic conjugate gradient.)
+    // type traits for linear systems solved with Eigen.
     typedef double ScalarType;
     const ScalarType Infinity = std::numeric_limits<ScalarType>::infinity();
     typedef Eigen::SparseMatrix<ScalarType> SparseMatrixType;
@@ -59,7 +57,7 @@ struct StoppingCriterion {
     ScalarType stopBelow=-Infinity;
     ScalarType stopAbove=Infinity;
     int persistence=1; // Activate if inserted value violates constraints persistence successive times.
-    enum Priority {Top,Medium,Ignore} priority=Top;
+    enum Priority {Ignore,Medium,Top} priority=Top;
     
     void Insert(ScalarType);
     bool Abort(bool &) const;
@@ -97,18 +95,19 @@ struct NewtonUnconstrained {
     friend std::ostream & operator << (std::ostream & os, const NewtonUnconstrained & a){
         a.PrintSelf(os); return os;}
 };
-    
+
+/// Solve a constrained optimization problem, using barrier functions and a Newton method for the inner iterations.
 struct NewtonConstrained : Functionnal {
     NewtonUnconstrained opt;
     
-    int maxIter=20; // Adds sub-iterations in opt
+    int maxIter=20;/// Max number of outer iterations (not counting inner iterations in opt)
     int iter=0;
     bool verbose=false;
     
-    ScalarType multiplier = 1;
-    ScalarType multiplierBound = 1e-4;
-    ScalarType multiplierDamping = 0.5;
-    ScalarType ghNormBase = 1;
+    ScalarType multiplier = 1;/// (identical) multiplicative factor for the barrier functions
+    ScalarType multiplierBound = 1e-4;/// Stop when multiplier goes below this bound
+    ScalarType multiplierDamping = 0.5;/// Multiplier reduction at each iteration
+    ScalarType ghNormBase = 1;/// opt.sGHNorm = ghNormBase*multiplier (inner stop criterion)
     /*
     struct ConstraintType {
         ScalarType initialMultiplier=1;
@@ -117,7 +116,7 @@ struct NewtonConstrained : Functionnal {
     };
      */
     
-    virtual ScalarType Value(const VectorType &);
+    virtual ScalarType Value(const VectorType &); //
     virtual const VectorType & Gradient();
     virtual const SparseMatrixType & Hessian();
     
@@ -140,5 +139,3 @@ protected:
     
 #include "NewtonSolvers.hxx"
 }
-
-#endif

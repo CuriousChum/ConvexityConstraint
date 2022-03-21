@@ -1,3 +1,4 @@
+#pragma once
 //
 //  PrincipalAgent_3.hxx
 //  CGalTest
@@ -5,9 +6,6 @@
 //  Created by Jean-Marie Mirebeau on 13/02/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
-
-#ifndef CGalTest_PrincipalAgent_3_hxx
-#define CGalTest_PrincipalAgent_3_hxx
 
 PrincipalAgent::PrincipalAgent(const CGT::RT & rt, ScalarType degen)
 //:minDegeneracy(degen_)
@@ -82,5 +80,3 @@ void PrincipalAgent::PrintSelf(std::ostream & os) const {
     ExportArrayArrow(hess)
     << "}";
 }
-
-#endif
