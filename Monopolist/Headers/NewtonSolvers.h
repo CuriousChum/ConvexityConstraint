@@ -26,7 +26,12 @@
 #include "JMM_CPPLibs/Macros/ExportArrow.h"
 
 namespace NewtonSolvers {
-	struct DomainError : public std::exception {};
+	struct DomainError : public std::exception {
+		const char * msg = msg_default;
+		constexpr static const char * const msg_default = "Unspecified domain error";
+		virtual const char * what() const throw() override {return msg;}
+		DomainError(const char * const msg_):msg(msg_){};
+	};
 
     // type traits for linear systems solved with Eigen.
     typedef double ScalarType;
@@ -48,7 +53,7 @@ namespace NewtonSolvers {
         return u_;}
     
 struct Functionnal {
-    // Return +infty if out of domain.
+    // throw or return +infty if out of domain.
     virtual ScalarType Value(const VectorType &){throw "Functionnal must be specialized";}
     virtual const VectorType & Gradient()=0; // At latest position.
     virtual const SparseMatrixType & Hessian()=0;
@@ -59,8 +64,7 @@ struct Functionnal {
 };
 
 struct StoppingCriterion {
-    ScalarType stopBelow=-Infinity;
-    ScalarType stopAbove=Infinity;
+    ScalarType stopBelow=-Infinity, stopAbove=Infinity;
     int persistence=1; // Activate if inserted value violates constraints persistence successive times.
     enum Priority {Ignore,Medium,Top} priority=Top;
     
@@ -99,6 +103,14 @@ struct NewtonUnconstrained {
     void PrintSelf(std::ostream & os) const;
     friend std::ostream & operator << (std::ostream & os, const NewtonUnconstrained & a){
         a.PrintSelf(os); return os;}
+	
+protected:
+	ScalarType SafeValue(Functionnal & pb, const VectorType & x) const {
+		try{return pb.Value(x);}
+		catch(DomainError & e){
+			if(verbose) std::cout << e.what() << std::endl;
+			return Infinity;}
+		}
 };
 
 /// Solve a constrained optimization problem, using barrier functions and a Newton method for the inner iterations.
@@ -132,15 +144,12 @@ struct NewtonConstrained : Functionnal {
     friend std::ostream & operator << (std::ostream & os, const NewtonConstrained & a){
         a.PrintSelf(os); return os;}
 
-    
 protected:
     ScalarType value_; VectorType gradient_; SparseMatrixType hessian_;
     
     Functionnal * objective;
     std::vector<Functionnal*> barriers;
-
 };
-    
-    
+
 #include "NewtonSolvers.hxx"
 }

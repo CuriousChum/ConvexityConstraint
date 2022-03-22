@@ -39,6 +39,7 @@ ConvexityConstraint::ConvexityConstraint(const std::vector<ScalarType> & pts){
 	IDpts.resize(pts.size()-1);
 	for(int i=0, error=0; i<IDpts.size(); ++i){
 		const ScalarType Dpt = pts[i+1]-pts[i];
+		if(Dpt<=0) throw NS::DomainError("ConvexityConstraint 1D : non-increasing points"); 
 		error += (Dpt<=0);
 		IDpts[i] = 1/Dpt;
 	}
@@ -50,14 +51,13 @@ void ConvexityConstraint::SetValues(const std::vector<ScalarType> & x_){
 }
 
 void ConvexityConstraint::ComputeValJacHess(FlagType r){
-	error=false;
 	if(r & RValues) values.resize(numberOfConstraints);
 	if(r & RJacobian) assert(jacobian.empty()); 
 
 	for(int i=1; i<x.size()-1; ++i){
 		const ScalarType Il =IDpts[i-1], Ir = IDpts[i], // Inverse length, left and right
 		d2x = (x[i+1]-x[i])*Ir + (x[i-1]-x[i])*Il;
-		error = error || (d2x <= 0);
+		if(d2x<=0) throw NS::DomainError("ConvexityConstraint 1D : non-convex data");
 		const int iConstraint = i-1;
 		if(r & RValues){values[iConstraint] = d2x;}
 		if(r & RJacobian){

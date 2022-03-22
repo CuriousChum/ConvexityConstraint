@@ -19,7 +19,8 @@ void ConvexityConstraint::SetValues(const std::vector<ScalarType> & heights)
     
     rt = CGT::RT(pts.begin(),pts.end());
     rt.infinite_vertex()->info() = {InfiniteIndex, -1};
-    error = (int)rt.number_of_hidden_vertices();
+	if(rt.number_of_hidden_vertices() > 0)
+		throw NS::DomainError("ConvexityConstraint 2D : non-convex data (hidden vertices)");
 }
 
 ScalarType ConvexityConstraint::Height(IndexType index) const {

@@ -93,27 +93,30 @@ void NewtonUnconstrained::Solve(Functionnal & pb, VectorType & x){
         
         if(dampingStrategy==DampingType::Increasing){
             
-            val = pb.Value(x-dir);
+            val = SafeValue(pb,x-dir);
             while(delta >= sDelta.stopBelow){
                 delta/=2;
-                const ScalarType cmp = pb.Value(x-delta*dir);
+				
+                const ScalarType cmp = SafeValue(pb,x-delta*dir);
                 
                 if(runtimeOut)
-                    (*runtimeOut) << "Tried " ExportVarArrow(delta) << " got " ExportVarArrow(val) << "\n";
+                    (*runtimeOut) << " Tried " ExportVarArrow(delta)
+					<< " got " ExportVarArrow(cmp) << "\n";
+				
                 if(cmp!=Infinity && cmp > val){
-                    delta*=2;
-                    x=x-delta*dir;
-                    val=pb.Value(x);
+                    delta *= 2;
+                    x = x-delta*dir;
+                    val = pb.Value(x); // No safety net here (value already tried)
                     break;
-                } else
-                    val = cmp;
+				} else {
+					val = cmp;}
             }
         } else { // Valid
             
             while(delta >= sDelta.stopBelow &&
-                  (val = pb.Value(x-delta*dir) ) > sObjective.values.back()){
+                  (val = SafeValue(pb,x-delta*dir) ) > sObjective.values.back()){
                 if(runtimeOut)
-                    (*runtimeOut) << "Tried " ExportVarArrow(delta) << " got " ExportVarArrow(val) << "\n";
+                    (*runtimeOut) << " Tried " ExportVarArrow(delta) << " got " ExportVarArrow(val) << "\n";
                 delta *= dampingRatio;
             }
             x= x-delta*dir;
@@ -184,7 +187,7 @@ ScalarType NewtonConstrained::Value(const VectorType & x){
 		std::ostream & os = std::cout;
 //		os << "Operator evaluation at " ExportArrayArrow(StdFromEigen(x));
         ScalarType v = objective->Value(x);
-        value_=v; os << "\nObjective value : " << v;
+        value_=v; os << "Objective value : " << v;
         for(auto c : barriers) {
             v=c->Value(x);
             value_ += multiplier * v;

@@ -15,7 +15,7 @@ namespace Geometry_2 {
     struct LipschitzConstraint : ConstraintType {
         LipschitzConstraint(const std::vector<CGT::Full_point> &);
         
-        virtual void SetValues(const std::vector<ScalarType> & x) override {input=x;error=0;}
+        virtual void SetValues(const std::vector<ScalarType> & x) override {input=x;}
         virtual void ComputeValJacHess(FlagType) override;
         
         virtual void PrintSelf(std::ostream &) const override;

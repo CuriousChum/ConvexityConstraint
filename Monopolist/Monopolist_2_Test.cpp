@@ -86,7 +86,7 @@ namespace PrincipalAgent_Test {
         
         NS::NewtonConstrained newton;
         newton.maxIter=50;
-		newton.verbose=true;
+//		newton.verbose=true;
         
         /*
         newton.multiplier = 2.e-5;*/
@@ -127,7 +127,6 @@ namespace PrincipalAgent_Test {
     struct TestFunction : ConstraintType {
         virtual void SetValues(const std::vector<ScalarType> & x_){
             x = x_[0];
-            error=0;
         }
         
         virtual void Compute(FlagType r) {

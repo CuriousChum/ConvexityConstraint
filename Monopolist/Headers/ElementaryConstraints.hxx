@@ -12,7 +12,8 @@
 void PositivityConstraint::SetValues(const std::vector<ScalarType> & val_){
 	numberOfUnknowns = (IndexType)val_.size();
     val = val_;
-    error = std::accumulate(val.begin(), val.end(), 0, [](int k, ScalarType x) {return k+int(x<=0);});
+	for(ScalarType x : val) {
+		if(x<=0) throw NS::DomainError("PositivityConstraint : non-positive data");}
 };
 
 
@@ -42,13 +43,11 @@ void ResampledConstraint::SetValues(const std::vector<ScalarType> & x_){
 		assert(0<=indices[i] && indices[i]<x_.size());
 		x[i] = x_[indices[i]];}
 	constraint->SetValues(x);
-	error = constraint->error;
 }
 
 void ResampledConstraint::ComputeValJacHess(FlagType r_){
 	FlagType r = r_ & ~(RLogSum | RLogGrad | RLogHessian);
 	constraint->Compute(r);
-	error = constraint->error;
 	numberOfConstraints = constraint->numberOfConstraints;
 	if(r & RValues){values = constraint->values;}
 	if(r & RJacobian){

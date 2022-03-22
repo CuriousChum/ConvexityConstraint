@@ -140,7 +140,6 @@ void ConstraintType::Clean(FlagType r){
 }
 
 void ConstraintType::Check(FlagType r){
-    assert(!error);
     if(r & RLogSum) assert(logSum<Infinity);
     if(r & RLogGrad) assert(!logGrad.empty());
     if(r & RLogHessian) assert(!logHessian.empty());
@@ -152,7 +151,6 @@ void ConstraintType::Check(FlagType r){
 ScalarType ConstraintType::Value(const NS::VectorType & x){
     Clean(RLogGrad | RLogHessian);
     SetValues( NS::StdFromEigen(x) );
-    if(error!=0) return Infinity;
     Compute(RLogSum);
     return logSum;
 }
@@ -190,7 +188,6 @@ const NS::SparseMatrixType & ConstraintType::Hessian(){
 
 void ConstraintType::PrintSelf(std::ostream & os) const {
     os << "{"
-    ExportVarArrow(error)
     ExportVarArrow(numberOfConstraints)
     ExportVarArrow(logSum)
     ExportArrayArrow(logGrad)
@@ -223,10 +220,10 @@ ScalarType ConstraintType::GeometricMean(const std::vector<ScalarType> & input,
     std::ostream & os = std::cout ExportArrayArrow(input) << "\n";
     
 	try{cons.SetValues(input);}
-	catch(DomainError &){std::cout << cons.Name() << ", error in SetValues\n"; return 1.;}
+	catch(NS::DomainError & e){std::cout << cons.Name() << e.what() << "\n"; return 1.;}
 	
 	try{cons.Compute(RValues | RJacobian);}
-	catch(DomainError &){std::cout << cons.Name() << ", error in Compute\n"; return 0.;};
+	catch(NS::DomainError & e){std::cout << cons.Name() << e.what() << "\n"; return 0.;};
 		    
     const std::vector<ScalarType> & x = cons.values;
     const std::vector<MatCoef> & jac = cons.jacobian;
@@ -285,9 +282,8 @@ void ConstraintType::ComputeLogarithms(FlagType r){
     
     for(int i=0; i<values.size(); ++i){
         tValue = values[i];
-		if(tValue<0) throw NS::DomainError; {error=1; logSum=Infinity; return;}
-        if(tValue==Infinity)
-            continue;
+		if(tValue<0) throw NS::DomainError("Barrier defined as logarithm of negative constraint value");
+        if(tValue==Infinity) continue;
         
         tJacobian.clear();
         tHessian.clear();
