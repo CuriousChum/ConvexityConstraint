@@ -162,7 +162,7 @@ void ConvexityConstraint::PrintSelf(std::ostream & os) const {
     os << "{"
     ExportVarArrow(rt) // pts come with rt
     ExportVarArrow(degen)
-    << '"' << "superclass" << '"' << "->";
+	<< "\"superclass\"->";
     ConstraintType::PrintSelf(os);
     os << "}";
 }

@@ -11,6 +11,7 @@
 
 #include "Headers/PrincipalAgent_2.h"
 #include "Headers/ConvexityConstraint_2.h"
+#include "Headers/ElementaryConstraints.h"
 #include "Headers/LipschitzConstraint_2.h"
 #include "Headers/ElementaryShapes_2.h"
 

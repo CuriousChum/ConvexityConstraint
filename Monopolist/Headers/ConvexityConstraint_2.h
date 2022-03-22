@@ -8,7 +8,9 @@
 //
 
 #include <vector>
+
 #include "Geometry_2.h"
+#include "ConvexityConstraint_1.h"
 
 namespace Geometry_2 {
 

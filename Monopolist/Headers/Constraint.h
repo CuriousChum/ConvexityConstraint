@@ -12,7 +12,6 @@
 #include <iostream>
 
 #include <numeric>
-//#include "Macros.h"
 #include "NewtonSolvers.h"
 
 namespace Constraint {
@@ -60,7 +59,6 @@ namespace Constraint {
         std::vector<MatCoef> jacobian;
         std::vector<TensorCoef> hessian;
         
-        
         // Glue code : Barrier for the constraint
         virtual ScalarType Value(const NS::VectorType &);
         virtual const NS::VectorType & Gradient(); // At latest position.
@@ -85,13 +83,5 @@ namespace Constraint {
         virtual size_t InputSize() const {return values.size();} //!! incorrect in general: numCons != numVar
     };
     
-    struct PositivityConstraint : ConstraintType {
-        virtual void SetValues(const std::vector<ScalarType> &);
-        virtual void ComputeValJacHess(FlagType);
-        virtual std::string Name() const {return "PositivityConstraint";}
-    protected:
-        std::vector<ScalarType> val;
-    };
-
 #include "Constraint.hxx"
 }

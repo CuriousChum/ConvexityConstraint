@@ -8,6 +8,7 @@
 //
 
 #include "Geometry_3.h"
+#include "Constraint.h"
 
 namespace Geometry_3 {
     
@@ -15,10 +16,7 @@ namespace Geometry_3 {
         
         // Put weights (! not heights) at zero.
         ConvexityConstraint(const std::vector<CGT::Full_point> &, ScalarType degen = 1e-8);
-        
         virtual void SetValues(const std::vector<ScalarType> &);
-        // To do : update regular triangulation with new heights by edge flipping ?
-        
         virtual void ComputeValJacHess(FlagType);
         
         CGT::RT rt;

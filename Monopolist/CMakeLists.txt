@@ -11,6 +11,9 @@ set(Project_Headers
 	${HeadersDir}/Constraint.h
 	${HeadersDir}/Constraint.hxx
 
+	${HeadersDir}/ElementaryConstraints.h
+	${HeadersDir}/ElementaryConstraints.hxx
+
 	${HeadersDir}/NewtonSolvers.h
 	${HeadersDir}/NewtonSolvers.hxx
 )
@@ -19,6 +22,8 @@ set(Project_Headers_2
 	${HeadersDir}/Geometry_2.h
 	${HeadersDir}/Geometry_2.hxx
 	${HeadersDir}/ElementaryShapes_2.h
+
+	${HeadersDir}/ConvexityConstraint_1.h
 
 	${HeadersDir}/ConvexityConstraint_2.h
 	${HeadersDir}/ConvexityConstraint_2.hxx
