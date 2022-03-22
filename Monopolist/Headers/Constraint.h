@@ -51,10 +51,13 @@ struct ConstraintType : NS::Functionnal {
 		RLogSum = 1<<0, RLogGrad = 1<<1, RLogHessian = 1<<2,
 		RValues = 1<<3, RJacobian = 1<<4, RHessian = 1<<5
 	};
+	
+	/// Set the values where the constraint is to be evaluated
 	virtual void SetValues(const std::vector<ScalarType> &)
 	{throw "ConstraintType::Compute error : must be specialized";};
 	virtual void Compute(FlagType);
 	
+	// Read only
 	IndexType numberOfConstraints=BadIndex, numberOfUnknowns=BadIndex;
 	ScalarType logSum = Infinity;
 	std::vector<ScalarType> logGrad;
@@ -81,8 +84,11 @@ protected:
 	virtual void Clean(FlagType);
 	virtual void Check(FlagType);
 	
+	/// Compute the value, jacobian, and hessian of the constraint
 	virtual void ComputeValJacHess(FlagType)
 	{throw "ConstraintType::ComputeValJacHess error : must be specialized";}
+	
+	/// Compute the value, jacobian and hessian of the barrier, defined as the sum of the logarithms of the constraint
 	virtual void ComputeLogarithms(FlagType);
 	
 	NS::VectorType grad_; NS::SparseMatrixType hess_;
