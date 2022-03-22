@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     19038,        484]
-NotebookOptionsPosition[     18675,        466]
-NotebookOutlinePosition[     19032,        482]
-CellTagsIndexPosition[     18989,        479]
+NotebookDataLength[     19184,        486]
+NotebookOptionsPosition[     18821,        468]
+NotebookOutlinePosition[     19178,        484]
+CellTagsIndexPosition[     19135,        481]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -45,7 +45,7 @@ Cell[BoxData[
    RowBox[{
     RowBox[{
     "MonopolistBinDir", " ", "=", " ", 
-     "\"\</Users/mirebeau/bin/ConvexityConstraint/Monopolist/Release\>\""}], 
+     "\"\</Users/mirebeau/bin/ConvexityConstraint/Monopolist/Debug\>\""}], 
     ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
@@ -461,7 +461,9 @@ Cell[BoxData[
    3.856614940912088*^9}, {3.856614993071085*^9, 3.856615032923571*^9}, {
    3.856616015351883*^9, 3.856616020053938*^9}, {3.8566162879753323`*^9, 
    3.856616288116651*^9}, {3.856618898471385*^9, 3.856618899763332*^9}, {
-   3.856841810838624*^9, 3.856841851825884*^9}}]
+   3.856841810838624*^9, 3.856841851825884*^9}, {3.856956845703404*^9, 
+   3.8569568471215067`*^9}, {3.856959624319915*^9, 3.856959626411056*^9}, {
+   3.856959679112686*^9, 3.856959682542576*^9}}]
 }, Open  ]]
 },
 WindowSize->{857, 878},
@@ -484,7 +486,7 @@ Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 161, 3, 148, "Title"],
 Cell[744, 27, 250, 6, 68, "Text"],
-Cell[997, 35, 17662, 428, 1965, "Input"]
+Cell[997, 35, 17808, 430, 2023, "Input"]
 }, Open  ]]
 }
 ]

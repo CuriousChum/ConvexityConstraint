@@ -49,28 +49,28 @@ namespace Constraint {
             {throw "ConstraintType::Compute error : must be specialized";};
         virtual void Compute(FlagType);
         
-        int error=1; // error==0 -> constraint satisfied, else constraint violated.
-        int numberOfConstraints=BadIndex;
+        IndexType numberOfConstraints=BadIndex, numberOfUnknowns=BadIndex;
         ScalarType logSum = Infinity;
         std::vector<ScalarType> logGrad;
         std::vector<MatCoef> logHessian; // Upper triangular part only
         
-        std::vector<ScalarType> values;
+        std::vector<ScalarType> values; // The values of the constraints
         std::vector<MatCoef> jacobian;
         std::vector<TensorCoef> hessian;
         
         // Glue code : Barrier for the constraint
-        virtual ScalarType Value(const NS::VectorType &);
-        virtual const NS::VectorType & Gradient(); // At latest position.
-        virtual const NS::SparseMatrixType & Hessian();
+        virtual ScalarType Value(const NS::VectorType &) override;
+        virtual const NS::VectorType & Gradient() override; // At latest position.
+        virtual const NS::SparseMatrixType & Hessian() override;
 
-        virtual std::string Name() const {return "Unspecified constraint name";}
+        virtual std::string Name() const override {return "Unspecified constraint name";}
         virtual void PrintSelf(std::ostream & os) const;
         friend std::ostream & operator << (std::ostream & os, const ConstraintType & c){
             c.PrintSelf(os); return os;}
         
         // nlopt interface
-        static ScalarType GeometricMean(const std::vector<ScalarType> &, std::vector<ScalarType> &, void*);
+        static ScalarType GeometricMean(const std::vector<ScalarType> &,
+										std::vector<ScalarType> &, void*);
     protected:
         virtual void Clean(FlagType);
         virtual void Check(FlagType);
@@ -80,7 +80,6 @@ namespace Constraint {
         virtual void ComputeLogarithms(FlagType);
         
         NS::VectorType grad_; NS::SparseMatrixType hess_;
-        virtual size_t InputSize() const {return values.size();} //!! incorrect in general: numCons != numVar
     };
     
 #include "Constraint.hxx"

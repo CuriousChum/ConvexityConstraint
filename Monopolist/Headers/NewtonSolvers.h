@@ -17,6 +17,8 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+#include <exception>
+
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <Eigen/SparseCholesky>
@@ -24,8 +26,8 @@
 #include "JMM_CPPLibs/Macros/ExportArrow.h"
 
 namespace NewtonSolvers {
-//    using namespace ConvexityConstraint_Traits; // Just for Scalar, Index, MatCoef
-    
+	struct DomainError : public std::exception {};
+
     // type traits for linear systems solved with Eigen.
     typedef double ScalarType;
     const ScalarType Infinity = std::numeric_limits<ScalarType>::infinity();
@@ -50,7 +52,10 @@ struct Functionnal {
     virtual ScalarType Value(const VectorType &){throw "Functionnal must be specialized";}
     virtual const VectorType & Gradient()=0; // At latest position.
     virtual const SparseMatrixType & Hessian()=0;
-    static ScalarType Evaluate(const std::vector<ScalarType> &, std::vector<ScalarType> &, void *);
+	virtual std::string Name() const {return "Unspecified functional name";}
+	virtual ~Functionnal(){}
+	
+	static ScalarType Evaluate(const std::vector<ScalarType> &, std::vector<ScalarType> &, void *);
 };
 
 struct StoppingCriterion {

@@ -9,7 +9,8 @@
 
 // %%%%%%%%%%%%%%% Functionnal interface to NLOPT %%%%%%%%%%%%%%%
 
-ScalarType Functionnal::Evaluate(const std::vector<ScalarType> & x, std::vector<ScalarType> & grad, void* data){
+ScalarType Functionnal::Evaluate(const std::vector<ScalarType> & x,
+								 std::vector<ScalarType> & grad, void* data){
     Functionnal & func = *static_cast<Functionnal*>(data);
     const ScalarType result = func.Value(EigenFromStd(x));
     if(!grad.empty()) grad = StdFromEigen(func.Gradient());
@@ -180,14 +181,15 @@ ScalarType NewtonConstrained::Value(const VectorType & x){
         for(auto c : barriers)
             value_ += multiplier * c->Value(x);
     } else {
-        std::ostream & os = std::cout << "Operator evaluation at " ExportArrayArrow(StdFromEigen(x));
+		std::ostream & os = std::cout;
+//		os << "Operator evaluation at " ExportArrayArrow(StdFromEigen(x));
         ScalarType v = objective->Value(x);
-        value_=v; std::cout << "\nObjective value : " << v;
+        value_=v; os << "\nObjective value : " << v;
         for(auto c : barriers) {
             v=c->Value(x);
             value_ += multiplier * v;
-            std::cout << ", Constraint value : " << v;}
-        std::cout << "\n";    
+            os << ", Constraint value : " << v;}
+        os << "\n";
     }
     return value_;
 }

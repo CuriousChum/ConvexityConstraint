@@ -181,3 +181,50 @@ void ConvexityConstraint::PrintSelf(std::ostream & os) const {
     ConstraintType::PrintSelf(os);
     os << "}";
 }
+
+
+// %%%%%%%%%%%%%%%%%% Convexity constraints associated with the boundary %%%%%%%%%%%%%%%%%
+
+std::vector<std::pair<int, std::unique_ptr<ConstraintType> > >
+BoundaryConvexityConstraints(const std::vector<CGAL_Traits::Full_point> & pts){
+	namespace CT = CGAL_Traits;
+	std::vector<std::pair<int, std::unique_ptr<ConstraintType> > > result;
+	
+	// Find the possible boundary tags of the domain. (Each corresponds to an edge.)
+	IndexType boundaries = 0;
+	for(const CT::Full_point & p : pts) boundaries |= p.second.boundary;
+	
+	for(int iBoundary=0; iBoundary<8*sizeof(IndexType); ++iBoundary){
+		if( !(boundaries & 1<<iBoundary) ) continue;
+		
+		// Select the points associated to this boundary tag.
+		std::vector<CT::Full_point> bpts;
+		for(const CT::Full_point & p : pts){
+			if(p.second.boundary & 1<<iBoundary) bpts.push_back(p);}
+		
+		// By assumption, these points are aligned. Take two to find the direction.
+		if(bpts.size()<=1) continue;
+		const CT::Point p0 = bpts[0].first.point();
+		const CT::Vector _v = bpts[1].first.point() - p0;
+		const CT::Vector v = _v/sqrt(_v.squared_length());
+		
+		// Get the abcissa and indices associated to the boundary points
+		std::vector<ScalarType> abcissa;
+		std::vector<IndexType> indices;
+		for(const CT::Full_point & p : bpts){
+			abcissa.push_back( v*(p.first.point()-p0) );
+			indices.push_back( p.second.index );
+		}
+		
+		std::cout << "Boundary convexity constraints "
+		ExportArrayArrow(abcissa)
+		ExportVarArrow(v)
+		ExportVarArrow(p0)
+		<< std::endl;
+		
+		auto cvx1 = std::make_unique<Geometry_1::ConvexityConstraint>(abcissa);
+		auto resampled = std::make_unique<ResampledConstraint>(std::move(cvx1),indices);
+		result.push_back({iBoundary,std::move(resampled)});
+	}
+	return result;
+}

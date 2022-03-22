@@ -19,11 +19,11 @@ namespace Geometry_1 {
 		// Input the base points, ordered in an increasing manner
         ConvexityConstraint(const std::vector<ScalarType> &);
         
-        virtual void SetValues(const std::vector<ScalarType> &);        
-        virtual void ComputeValJacHess(FlagType);
+        virtual void SetValues(const std::vector<ScalarType> &) override;
+        virtual void ComputeValJacHess(FlagType) override;
         
-        virtual void PrintSelf(std::ostream & os) const;
-        virtual std::string Name() const {return "ConvexityConstraint_1";}
+        virtual void PrintSelf(std::ostream & os) const override;
+        virtual std::string Name() const override {return "ConvexityConstraint_1";}
     protected:
         std::vector<ScalarType> IDpts;//Inverse difference between successive point positions
 		std::vector<ScalarType> x;
@@ -34,38 +34,38 @@ namespace Geometry_1 {
 
 ConvexityConstraint::ConvexityConstraint(const std::vector<ScalarType> & pts){
 	assert(!pts.empty());
+	numberOfConstraints = (IndexType)pts.size()-2;
+	numberOfUnknowns = (IndexType)pts.size();
 	IDpts.resize(pts.size()-1);
-	for(int i=0; i<IDpts.size(); ++i){
+	for(int i=0, error=0; i<IDpts.size(); ++i){
 		const ScalarType Dpt = pts[i+1]-pts[i];
-		if(Dpt<=0) throw "Convexity_constraint 1D error : points must be increasing";
+		error += (Dpt<=0);
 		IDpts[i] = 1/Dpt;
 	}
 }
 
 void ConvexityConstraint::SetValues(const std::vector<ScalarType> & x_){
-	assert(x_.size() == IDpts.size()+1);
+	assert(x_.size() == numberOfConstraints+2);
 	x = x_;
-	// TODO ? report error here, or at computation ?
 }
 
 void ConvexityConstraint::ComputeValJacHess(FlagType r){
 	error=false;
-	if(r & RValues){
-		values.resize(x.size());
-		values[0] = Infinity;
-		values[x.size()-1]=Infinity;
-	}
+	if(r & RValues) values.resize(numberOfConstraints);
+	if(r & RJacobian) assert(jacobian.empty()); 
+
 	for(int i=1; i<x.size()-1; ++i){
 		const ScalarType Il =IDpts[i-1], Ir = IDpts[i], // Inverse length, left and right
 		d2x = (x[i+1]-x[i])*Ir + (x[i-1]-x[i])*Il;
-		error = error || (d2x <= 0); 
-		if(r & RValues){values[i] = d2x;}
+		error = error || (d2x <= 0);
+		const int iConstraint = i-1;
+		if(r & RValues){values[iConstraint] = d2x;}
 		if(r & RJacobian){
-			jacobian.push_back({i,i+1, Ir});
-			jacobian.push_back({i,i,  -Ir-Il});
-			jacobian.push_back({i,i-1, Il});
+			jacobian.push_back({iConstraint,i+1, Ir});
+			jacobian.push_back({iConstraint,i,  -Ir-Il});
+			jacobian.push_back({iConstraint,i-1, Il});
 		}
-		// The hessian remains empty
+		// The constraints are linear, hence the hessian remains empty
 	}
 }
 

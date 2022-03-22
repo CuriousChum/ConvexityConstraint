@@ -16,12 +16,12 @@ namespace Geometry_3 {
         
         // Put weights (! not heights) at zero.
         ConvexityConstraint(const std::vector<CGT::Full_point> &, ScalarType degen = 1e-8);
-        virtual void SetValues(const std::vector<ScalarType> &);
-        virtual void ComputeValJacHess(FlagType);
+        virtual void SetValues(const std::vector<ScalarType> &) override;
+        virtual void ComputeValJacHess(FlagType) override;
         
         CGT::RT rt;
-        virtual void PrintSelf(std::ostream & os) const;
-        virtual std::string Name() const {return "ConvexityConstraint_3";}
+        virtual void PrintSelf(std::ostream & os) const override;
+        virtual std::string Name() const override {return "ConvexityConstraint_3";}
     protected:
         std::vector<CGT::Full_point> pts;
         const ScalarType degen;

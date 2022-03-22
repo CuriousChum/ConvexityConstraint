@@ -15,19 +15,19 @@ namespace Geometry_2 {
     struct LipschitzConstraint : ConstraintType {
         LipschitzConstraint(const std::vector<CGT::Full_point> &);
         
-        virtual void SetValues(const std::vector<ScalarType> & x){input=x;error=0;}
-        virtual void ComputeValJacHess(FlagType);
+        virtual void SetValues(const std::vector<ScalarType> & x) override {input=x;error=0;}
+        virtual void ComputeValJacHess(FlagType) override;
         
-        virtual void PrintSelf(std::ostream &) const;
-        virtual std::string Name() const {return "LipschitzConstraint";}
+        virtual void PrintSelf(std::ostream &) const override;
+        virtual std::string Name() const override {return "LipschitzConstraint";}
         bool lastOfLineOnly = true;
     protected:
         std::vector<MatCoef> constraints;
         std::vector<ScalarType> input;
-        virtual size_t InputSize() const {return input.size();}
     };
 
     LipschitzConstraint::LipschitzConstraint(const std::vector<CGT::Full_point> & pts){
+		numberOfUnknowns = pts.size();
         if(pts.empty()) return;
         struct OrderType {
             int i;         typedef std::tuple<ScalarType, ScalarType> TupleType;
@@ -45,13 +45,16 @@ namespace Geometry_2 {
             
             std::array<PI,2> lastP; lastP[0] = *sorter.begin(); // donc...
             for(const PI & pi : sorter){
-                if((!lastOfLineOnly || pi.first[i] != lastP[0].first[i]) && lastP[0].first[i]==lastP[1].first[i])
-                    constraints.push_back({lastP[0].second,lastP[1].second,lastP[0].first[1-i]-lastP[1].first[1-i]});
+                if((!lastOfLineOnly || pi.first[i] != lastP[0].first[i])
+				   && lastP[0].first[i]==lastP[1].first[i])
+                    constraints.push_back({lastP[0].second,lastP[1].second,
+						lastP[0].first[1-i]-lastP[1].first[1-i]});
                 lastP[1]=lastP[0];
                 lastP[0]=pi;
             }
             if(lastP[0].first[i]==lastP[1].first[i]) // Last line
-                constraints.push_back({lastP[0].second,lastP[1].second,lastP[0].first[1-i]-lastP[1].first[1-i]});
+                constraints.push_back({lastP[0].second,lastP[1].second,
+					lastP[0].first[1-i]-lastP[1].first[1-i]});
         }
         numberOfConstraints = (int)constraints.size();
     }
@@ -114,22 +117,3 @@ namespace Geometry_2 {
         os << "}";
     }
 }
-
-
-
-
-/*void PositivityConstraint::SetValues(const std::vector<ScalarType> & val_){
- val = val_;
- error = std::accumulate(val.begin(), val.end(), 0, [](int k, ScalarType x) {return k+int(x<=0);});
- };
- 
- 
- void PositivityConstraint::ComputeValJacHess(FlagType r){
- numberOfConstraints=(int)val.size();
- if(r & RValues) values.reserve(numberOfConstraints);
- if(r & RJacobian) jacobian.reserve(numberOfConstraints);
- for(int i=0 ; i<numberOfConstraints; ++i) {
- if(r & RValues) values.push_back(val[i]);
- if(r & RJacobian) jacobian.push_back({i,i,1});
- }
- }*/

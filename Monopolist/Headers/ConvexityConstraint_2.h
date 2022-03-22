@@ -11,6 +11,7 @@
 
 #include "Geometry_2.h"
 #include "ConvexityConstraint_1.h"
+#include "ElementaryConstraints.h"
 
 namespace Geometry_2 {
 
@@ -22,25 +23,33 @@ namespace Geometry_2 {
  */
 struct ConvexityConstraint : ConstraintType {
     typedef CGAL_Traits::Full_point Full_point;
-    ConvexityConstraint(std::vector<Full_point> pts_):pts(pts_){};
+    ConvexityConstraint(const std::vector<Full_point> & pts_):pts(pts_){};
     
-    virtual void SetValues(const std::vector<ScalarType> &);
-    virtual void Compute(FlagType);
+    virtual void SetValues(const std::vector<ScalarType> &) override;
+    virtual void Compute(FlagType) override;
     // To do : work with ComputeValJacHess as others ?
 
     CGAL_Traits::RT rt; // To do : read only
-    virtual void PrintSelf(std::ostream & os) const;
-    virtual std::string Name() const {return "ConvexityConstraint";}
+    virtual void PrintSelf(std::ostream & os) const override;
+    virtual std::string Name() const override {return "ConvexityConstraint_2";}
     const std::vector<Full_point> & GetPts() const {return pts;}
     size_t Size() const {return pts.size();}    
 protected:
     std::vector<Full_point> pts;
     ScalarType Height(IndexType index) const;
 };
-    
-    
-    
-    
+/**
+ Returns the convexity constraints associated to the boundary points of the domain.
+ 
+ Useful for domains which are convex but not strictly convex, and when the function image
+ is not contained in a domain a priori given.  The boundaries must be properly tagged.
+
+Output : a constraint, for each tagged domain edge. It is implemented as a resampled one-dimensional convexity constraint
+ */
+std::vector< std::pair<int, std::unique_ptr<ConstraintType> > >
+BoundaryConvexityConstraints(const std::vector<CGAL_Traits::Full_point> & pts);
+
+
     /* // Later
 struct LipschitzRegularityConstraint : ConstraintType {
     LipschitzRegularityConstraint(const CGAL_Traits::RT & rt);

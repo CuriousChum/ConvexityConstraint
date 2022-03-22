@@ -49,7 +49,7 @@ MakeShape(int n, ShapeType shape,ScalarType theta=0., PointType bary={Infinity,I
 					IndexType flag =
 					(i==0 ? 1 : 0) | (j==0 ? 2 : 0) |
 					(i==n-1 ? 4 : 0) | (j==n-1 ? 8 : 0);
-					pts.push_back({WP({1.+(i+0.5)*h,1.+(j+0.5)*h},0),
+					pts.push_back({WP({1.+i*h,1.+j*h},0),
 						IT(counter++,flag)});
 				}
 			bary_=1.5;

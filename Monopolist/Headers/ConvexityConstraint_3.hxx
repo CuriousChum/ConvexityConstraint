@@ -21,6 +21,7 @@ ConvexityConstraint::ConvexityConstraint(const std::vector<CGT::Full_point> & pt
 }
 
 void ConvexityConstraint::SetValues(const std::vector<ScalarType> & x){
+	numberOfUnknowns = (IndexType) x.size();
     using namespace CGT;
     if(x.size()!=pts.size()) throw "Convexity constraint error: Invalid vector size";
     for(Full_point & p : pts) {

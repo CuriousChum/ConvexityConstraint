@@ -31,9 +31,9 @@ struct PrincipalAgent : NS::Functionnal {
     
     
     // Glue code : Barrier for the constraint
-    virtual ScalarType Value(const NS::VectorType &);
-    virtual const NS::VectorType & Gradient(){return grad_;} // At latest position.
-    virtual const NS::SparseMatrixType & Hessian(){return hess_;}
+    virtual ScalarType Value(const NS::VectorType &) override;
+    virtual const NS::VectorType & Gradient() override {return grad_;} // At latest position.
+    virtual const NS::SparseMatrixType & Hessian() override {return hess_;}
 
     void PrintSelf(std::ostream & os) const;
     friend std::ostream & operator << (std::ostream & os, const PrincipalAgent & a){

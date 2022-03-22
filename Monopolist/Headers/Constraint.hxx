@@ -151,9 +151,7 @@ void ConstraintType::Check(FlagType r){
 
 ScalarType ConstraintType::Value(const NS::VectorType & x){
     Clean(RLogGrad | RLogHessian);
-    std::vector<ScalarType> y(x.size());
-    for(int i=0; i<x.size(); ++i) y[i]=x[i];
-    SetValues(y);
+    SetValues( NS::StdFromEigen(x) );
     if(error!=0) return Infinity;
     Compute(RLogSum);
     return logSum;
@@ -170,11 +168,7 @@ const NS::VectorType & ConstraintType::Gradient(){
         std::vector<Eigen::Triplet<ScalarType> > triplets;
         triplets.reserve(logHessian.size());
         
-        ScalarType maxv=0;
-        for(auto c : logHessian){
-            triplets.push_back({c.i,c.j,c.v});
-            maxv=std::max(maxv,c.v);
-        }
+        for(auto c : logHessian) triplets.push_back({c.i,c.j,c.v});
         /*
         std::cout
         ExportVarArrow(maxv)
@@ -223,14 +217,17 @@ void ConstraintType::Compute(FlagType r0){
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%% NLOPT interface %%%%%%%%%%%%%%%%%
 
-ScalarType ConstraintType::GeometricMean(const std::vector<ScalarType> & input, std::vector<ScalarType> & grad, void*data){
+ScalarType ConstraintType::GeometricMean(const std::vector<ScalarType> & input,
+										 std::vector<ScalarType> & grad, void*data){
     ConstraintType & cons = *static_cast<ConstraintType*>(data);
     std::ostream & os = std::cout ExportArrayArrow(input) << "\n";
-    cons.SetValues(input);
-    if(cons.error) {std::cout << cons.Name() << ", error in SetValues\n"; return 1.;}
-    cons.Compute(RValues | RJacobian);
-    if(cons.error) {std::cout << cons.Name() << ", error in Compute\n"; return 0.;};
     
+	try{cons.SetValues(input);}
+	catch(DomainError &){std::cout << cons.Name() << ", error in SetValues\n"; return 1.;}
+	
+	try{cons.Compute(RValues | RJacobian);}
+	catch(DomainError &){std::cout << cons.Name() << ", error in Compute\n"; return 0.;};
+		    
     const std::vector<ScalarType> & x = cons.values;
     const std::vector<MatCoef> & jac = cons.jacobian;
     
@@ -260,7 +257,8 @@ ScalarType ConstraintType::GeometricMean(const std::vector<ScalarType> & input, 
      ExportVarArrow(result)
      << "\n";*/
     
-    std::cout << "ConstraintType::GeometricMean, value : " << result << ", " << cons.Name() << "\n";
+    std::cout << "ConstraintType::GeometricMean, value : "
+	<< result << ", " << cons.Name() << "\n";
     
     // Negating, as required by NLOPT convention
     result*=-1;
@@ -275,8 +273,9 @@ ScalarType ConstraintType::GeometricMean(const std::vector<ScalarType> & input, 
 
 void ConstraintType::ComputeLogarithms(FlagType r){
     // Jacobian and hessian have been computed and sorted. Cleanup done.
-    if(r & RLogGrad) logGrad.resize(InputSize(),0);
+    if(r & RLogGrad) logGrad.resize(numberOfUnknowns,0);
     
+	// Temporary value, jacobian, hessian, associated to a single constraint
     ScalarType tValue;
     std::vector<VecCoef> tJacobian;
     std::vector<MatCoef> tHessian;
@@ -286,7 +285,7 @@ void ConstraintType::ComputeLogarithms(FlagType r){
     
     for(int i=0; i<values.size(); ++i){
         tValue = values[i];
-        if(tValue<0) {error=1; logSum=Infinity; return;}
+		if(tValue<0) throw NS::DomainError; {error=1; logSum=Infinity; return;}
         if(tValue==Infinity)
             continue;
         
@@ -299,8 +298,7 @@ void ConstraintType::ComputeLogarithms(FlagType r){
         for(;hessIt!=hessian.end() && hessIt->i == i; ++hessIt)
             tHessian.push_back({hessIt->j,hessIt->k,hessIt->v});
         
-        // Compute logarithm
-        
+        // Compute logarithm of the i-th constraint
         NLog(tValue,tJacobian,tHessian);
         
         Simplify(tJacobian);
@@ -309,8 +307,9 @@ void ConstraintType::ComputeLogarithms(FlagType r){
         // Save computations
         logSum += tValue;
         if(r & RLogGrad)
-            for(const VecCoef & c : tJacobian)
-                logGrad[c.first] += c.second;
+			for(const VecCoef & c : tJacobian){
+				assert(0<=c.first && c.first<logGrad.size());
+				logGrad[c.first] += c.second;}
         if(r & RLogHessian)
             logHessian.insert(logHessian.end(), tHessian.begin(), tHessian.end());
     }

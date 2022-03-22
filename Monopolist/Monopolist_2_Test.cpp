@@ -39,7 +39,12 @@ namespace PrincipalAgent_Test {
 		// Generate the domain mesh, and setup the convexity constraints
         ConvexityConstraint cvx(pts);
         PositivityConstraint pos;
-        std::vector<NS::Functionnal*> constraints = {&cvx, &pos}; //
+        std::vector<NS::Functionnal*> constraints = {&cvx, &pos};
+		
+		// Also get the boundary constraints
+		const auto & cvxbd = BoundaryConvexityConstraints(pts);
+		for(const auto & iBoundary_pConstraint : cvxbd)
+			constraints.push_back(iBoundary_pConstraint.second.get());
 
 
         // Generate an initial guess, as a parabola, and check the convexity constraint
@@ -47,6 +52,26 @@ namespace PrincipalAgent_Test {
         for(auto p : cvx.GetPts()) x.push_back(CGT::Parabola(p.first));
         
         cvx.SetValues(x);
+
+		
+		for(const auto & ip : cvxbd){
+			ConstraintType * pConstraint = ip.second.get();
+			std::cout
+			//ExportVarArrow(iBoundary)
+			ExportVarArrow(pConstraint)
+			<< std::endl;
+			
+			pConstraint->SetValues(x);
+			pConstraint->Compute(31);
+			std::cout
+			ExportVarArrow(pConstraint->logSum)
+			ExportArrayArrow(pConstraint->values)
+			ExportArrayArrow(pConstraint->jacobian)
+			<< std::endl;
+		}
+		//return;
+
+		
         /*cvx.Compute(31);
         std::cout ExportVarArrow(cvx.error) ExportVarArrow(cvx.logSum) << "\n";
         
@@ -61,11 +86,12 @@ namespace PrincipalAgent_Test {
         
         NS::NewtonConstrained newton;
         newton.maxIter=50;
+		newton.verbose=true;
         
         /*
-        newton.multiplier = 2.e-5;
+        newton.multiplier = 2.e-5;*/
         newton.opt.sDelta.stopBelow = 1e-4;
-         */
+         
         
         newton.multiplier = 1./x.size();
         newton.multiplierBound *= newton.multiplier; // Vanishing constraint penalisation
