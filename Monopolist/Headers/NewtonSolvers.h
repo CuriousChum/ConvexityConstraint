@@ -26,12 +26,18 @@
 #include "JMM_CPPLibs/Macros/ExportArrow.h"
 
 namespace NewtonSolvers {
-	struct DomainError : public std::exception {
-		const char * msg = msg_default;
-		constexpr static const char * const msg_default = "Unspecified domain error";
-		virtual const char * what() const throw() override {return msg;}
-		DomainError(const char * const msg_):msg(msg_){};
-	};
+	
+struct EvaluationError : public std::exception {
+	const char * msg = msg_default;
+	constexpr static const char * const msg_default = "Unspecified domain error";
+	virtual const char * what() const throw() override {return msg;}
+	EvaluationError(const char * const msg_):msg(msg_){};
+};
+
+struct DomainError : EvaluationError {
+	DomainError(const char * const msg_):EvaluationError(msg_){}};
+struct DataError : EvaluationError {
+	DataError(const char * const msg_):EvaluationError(msg_){}};
 
     // type traits for linear systems solved with Eigen.
     typedef double ScalarType;

@@ -23,11 +23,9 @@ namespace Geometry_2 {
  */
 struct ConvexityConstraint : ConstraintType {
     typedef CGAL_Traits::Full_point Full_point;
-    ConvexityConstraint(const std::vector<Full_point> & pts_):pts(pts_){};
-    
+    ConvexityConstraint(const std::vector<Full_point> & pts_):pts(pts_){
+		numberOfUnknowns=pts_.size(); numberOfConstraints=pts_.size();};    
     virtual void SetValues(const std::vector<ScalarType> &) override;
-    virtual void Compute(FlagType) override;
-    // To do : work with ComputeValJacHess as others ?
 
     CGAL_Traits::RT rt; // To do : read only
     virtual void PrintSelf(std::ostream & os) const override;
@@ -37,6 +35,7 @@ struct ConvexityConstraint : ConstraintType {
 protected:
     std::vector<Full_point> pts;
     ScalarType Height(IndexType index) const;
+	virtual void ComputeValJacHess(FlagType) override;
 };
 /**
  Returns the convexity constraints associated to the boundary points of the domain.

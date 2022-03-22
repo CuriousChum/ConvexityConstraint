@@ -20,7 +20,6 @@ namespace PrincipalAgent_Test {
     using namespace Geometry_2;
 	typedef std::vector<CGT::Full_point> PointSet;
 
-
     /** %%%%%%%%%%%%%%%% Standard Principal Agent (also called monopolist) %%%%%%%%%%%%%%%%%
 	 Minimise
 	 int_Omega u + (1/2) |grad u- x|^2
@@ -46,31 +45,11 @@ namespace PrincipalAgent_Test {
 		for(const auto & iBoundary_pConstraint : cvxbd)
 			constraints.push_back(iBoundary_pConstraint.second.get());
 
-
         // Generate an initial guess, as a parabola, and check the convexity constraint
         std::vector<ScalarType> x;
         for(auto p : cvx.GetPts()) x.push_back(CGT::Parabola(p.first));
         
         cvx.SetValues(x);
-
-		
-		for(const auto & ip : cvxbd){
-			ConstraintType * pConstraint = ip.second.get();
-			std::cout
-			//ExportVarArrow(iBoundary)
-			ExportVarArrow(pConstraint)
-			<< std::endl;
-			
-			pConstraint->SetValues(x);
-			pConstraint->Compute(31);
-			std::cout
-			ExportVarArrow(pConstraint->logSum)
-			ExportArrayArrow(pConstraint->values)
-			ExportArrayArrow(pConstraint->jacobian)
-			<< std::endl;
-		}
-		//return;
-
 		
         /*cvx.Compute(31);
         std::cout ExportVarArrow(cvx.error) ExportVarArrow(cvx.logSum) << "\n";
@@ -89,8 +68,8 @@ namespace PrincipalAgent_Test {
 //		newton.verbose=true;
         
         /*
-        newton.multiplier = 2.e-5;*/
-        newton.opt.sDelta.stopBelow = 1e-4;
+        newton.multiplier = 2.e-5;
+        newton.opt.sDelta.stopBelow = 1e-4;*/
          
         
         newton.multiplier = 1./x.size();

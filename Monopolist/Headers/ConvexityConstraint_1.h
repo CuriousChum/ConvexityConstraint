@@ -9,27 +9,28 @@
 #include "Constraint.h"
 
 namespace Geometry_1 {
-	using namespace Constraint;
+using namespace Constraint;
+
+/**
+ One dimensional convexity constraint
+ */
+struct ConvexityConstraint : ConstraintType {
+	
+	// Input the base points, ordered in an increasing manner
+	ConvexityConstraint(const std::vector<ScalarType> &);
+	
+	virtual void SetValues(const std::vector<ScalarType> &) override;
+	virtual void ComputeValJacHess(FlagType) override;
+	
+	virtual void PrintSelf(std::ostream & os) const override;
+	virtual std::string Name() const override {return "ConvexityConstraint_1";}
+protected:
+	std::vector<ScalarType> IDpts;//Inverse difference between successive point positions
+	std::vector<ScalarType> x;
+};
     
-	/**
-	 One dimensional convexity constraint
-	 */
-    struct ConvexityConstraint : ConstraintType {
-        
-		// Input the base points, ordered in an increasing manner
-        ConvexityConstraint(const std::vector<ScalarType> &);
-        
-        virtual void SetValues(const std::vector<ScalarType> &) override;
-        virtual void ComputeValJacHess(FlagType) override;
-        
-        virtual void PrintSelf(std::ostream & os) const override;
-        virtual std::string Name() const override {return "ConvexityConstraint_1";}
-    protected:
-        std::vector<ScalarType> IDpts;//Inverse difference between successive point positions
-		std::vector<ScalarType> x;
-    };
-    
-//#include "ConvexityConstraint_1.hxx"
+// %%%%%%%% Member functions %%%%%%%%%%
+// Defined in same file since they are very basic
 
 
 ConvexityConstraint::ConvexityConstraint(const std::vector<ScalarType> & pts){
@@ -39,7 +40,7 @@ ConvexityConstraint::ConvexityConstraint(const std::vector<ScalarType> & pts){
 	IDpts.resize(pts.size()-1);
 	for(int i=0, error=0; i<IDpts.size(); ++i){
 		const ScalarType Dpt = pts[i+1]-pts[i];
-		if(Dpt<=0) throw NS::DomainError("ConvexityConstraint 1D : non-increasing points"); 
+		if(Dpt<=0) throw NS::DataError("ConvexityConstraint 1D : non-increasing points"); 
 		error += (Dpt<=0);
 		IDpts[i] = 1/Dpt;
 	}

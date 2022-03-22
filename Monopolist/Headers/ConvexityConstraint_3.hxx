@@ -14,22 +14,26 @@ ConvexityConstraint::ConvexityConstraint(const std::vector<CGT::Full_point> & pt
     check.fill(std::numeric_limits<ScalarType>::quiet_NaN());
     for(const CGT::Full_point & p : pts){
         const IndexType index = p.second.index;
-        if(index<0 || index>=pts.size()) throw "Convexity constraint error: Invalid indices";
+        if(index<0 || index>=pts.size())
+			throw NS::DataError("Convexity constraint 3D: Invalid indices");
         check[index]=0;
     }
-    if(check.hasNaN()) throw "Convexity constraint error: Invalid indices";
+    if(check.hasNaN())
+		throw NS::DataError("Convexity constraint error: Invalid indices");
 }
 
 void ConvexityConstraint::SetValues(const std::vector<ScalarType> & x){
 	numberOfUnknowns = (IndexType) x.size();
     using namespace CGT;
-    if(x.size()!=pts.size()) throw "Convexity constraint error: Invalid vector size";
+    if(x.size()!=pts.size())
+		throw DataError("Convexity constraint error: Invalid vector size");
     for(Full_point & p : pts) {
         const ScalarType w = Parabola(p.first.point()) - x[p.second.index];
         p.first = Weighted_point(p.first.point(),w);
     }
     rt = RT(pts.begin(), pts.end());
-    error = int(pts.size() - rt.number_of_vertices());
+	if(rt.number_of_vertices()!=pts.size())
+		throw NS::DomainError("ConvexityConstraint 3D : non-convex data");
 //    std::cout << "Computing0 " << "\n";
 
 }
