@@ -6,6 +6,8 @@
 //  Created by Jean-Marie Mirebeau on 21/03/2022.
 //
 
+#include "Constraint.h"
+
 namespace Constraint {
 
 /**

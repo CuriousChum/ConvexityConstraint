@@ -25,6 +25,7 @@ typedef unsigned int FlagType; // Conjunction of requests
 const ScalarType Infinity = std::numeric_limits<ScalarType>::infinity();
 const IndexType BadIndex = std::numeric_limits<IndexType>::max();
 const IndexType InfiniteIndex = BadIndex-1;
+const FlagType RoundBoundary = 1<<31;
 
 typedef std::pair<IndexType, ScalarType> VecCoef;
 struct MatCoef;

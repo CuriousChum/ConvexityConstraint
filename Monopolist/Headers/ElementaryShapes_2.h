@@ -46,7 +46,7 @@ MakeShape(int n, ShapeType shape,ScalarType theta=0., PointType bary={Infinity,I
 		case ShapeType::Square:
 			for(int i=0; i<n; ++i)
 				for(int j=0; j<n; ++j){
-					IndexType flag =
+					FlagType flag =
 					(i==0 ? 1 : 0) | (j==0 ? 2 : 0) |
 					(i==n-1 ? 4 : 0) | (j==n-1 ? 8 : 0);
 					pts.push_back({WP({1.+i*h,1.+j*h},0),
@@ -63,7 +63,8 @@ MakeShape(int n, ShapeType shape,ScalarType theta=0., PointType bary={Infinity,I
 				const ScalarType k = (int)floor(2.*pi*r/h);
 				for(int j=0; j<k; ++j){
 					const ScalarType t = (2.*pi*j)/k;
-					pts.push_back({WP({c0+r*cos(t), c0+r*sin(t)},0), IT(counter++,0)});
+					pts.push_back({WP({c0+r*cos(t), c0+r*sin(t)},0),
+						IT(counter++,RoundBoundary)});
 				}
 			}
 			bary_=1.5;
@@ -76,12 +77,13 @@ MakeShape(int n, ShapeType shape,ScalarType theta=0., PointType bary={Infinity,I
 				for(int j=0; j<n-i; ++j){
 					const ScalarType c=cos(pi/12), s=sin(pi/12);
 					
-					IndexType flag = 0;
+					FlagType flag = 0;
 					if(i==0) flag = flag | 1;
 					if(j==0) flag = flag | 1<<1;
 					if(i+j==n-1) flag = flag | 1<<2;
 					
-					pts.push_back({WP({c0-h*(i*c+j*s),c0-h*(i*s+j*c)},0),IT(counter++,flag)});
+					pts.push_back({WP({c0-h*(i*c+j*s),c0-h*(i*s+j*c)},0),
+						IT(counter++,flag)});
 
 				}
 			bary_=1.1053600322580646;

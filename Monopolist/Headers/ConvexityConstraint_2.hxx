@@ -290,14 +290,15 @@ void ConvexityConstraint::PrintSelf(std::ostream & os) const {
 
 // %%%%%%%%%%%%%%%%%% Convexity constraints associated with the boundary %%%%%%%%%%%%%%%%%
 
-std::map<int, std::unique_ptr<ConstraintType> >
+std::map<FlagType, std::unique_ptr<ConstraintType> >
 BoundaryConvexityConstraints(const std::vector<CGAL_Traits::Full_point> & pts){
 	namespace CT = CGAL_Traits;
-	std::map<int, std::unique_ptr<ConstraintType> > result;
+	std::map<FlagType, std::unique_ptr<ConstraintType> > result;
 	
 	// Find the possible boundary tags of the domain. (Each corresponds to an edge.)
-	IndexType boundaries = 0;
+	FlagType boundaries = 0;
 	for(const CT::Full_point & p : pts) boundaries |= p.second.boundary;
+	boundaries &= ~RoundBoundary; // No constraint attached to strictly convex boundary
 	
 	for(int iBoundary=0; iBoundary<8*sizeof(IndexType); ++iBoundary){
 		if( !(boundaries & 1<<iBoundary) ) continue;
@@ -325,7 +326,7 @@ BoundaryConvexityConstraints(const std::vector<CGAL_Traits::Full_point> & pts){
 		
 		auto cvx1 = std::make_unique<Geometry_1::ConvexityConstraint>(abcissa);
 		auto resampled = std::make_unique<ResampledConstraint>(std::move(cvx1),indices);
-		result.insert({iBoundary,std::move(resampled)});
+		result.insert({1<<iBoundary,std::move(resampled)});
 	}
 	return result;
 }

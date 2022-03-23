@@ -21,7 +21,7 @@ namespace Geometry_3 {
     
     const int Dimension=3;
     
-    namespace CGT { // CGAL_Traits
+    namespace CGT { 
         struct InfoType {
             IndexType index=BadIndex;
             IndexType boundary=0;

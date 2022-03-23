@@ -28,12 +28,10 @@ namespace Geometry_2 {
     };
     
     
-    namespace CGAL_Traits {
-        //        typedef IndexType InfoType;
-        
+    namespace CGAL_Traits {	
         struct InfoType {
             IndexType index=BadIndex;
-            IndexType boundary=0;
+            FlagType boundary=0;
             InfoType(IndexType index_, IndexType boundary_):index(index_), boundary(boundary_){};
             InfoType(){};
             bool OnBoundary() const {return boundary;}

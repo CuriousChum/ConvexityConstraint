@@ -8,12 +8,12 @@
 //
 
 #include "Geometry_3.h"
-#include "Constraint.h"
+#include "ElementaryConstraints.h"
+#include "ConvexityConstraint_2.h"
 
 namespace Geometry_3 {
     
 struct ConvexityConstraint : ConstraintType {
-	
 	// Put weights (! not heights) at zero.
 	ConvexityConstraint(const std::vector<CGT::Full_point> &, ScalarType degen = 1e-8);
 	virtual void SetValues(const std::vector<ScalarType> &) override;
@@ -28,7 +28,8 @@ protected:
 	std::vector<TensorCoef> hessian;
 };
     
-
+std::map<FlagType, std::unique_ptr<ConstraintType> >
+BoundaryConvexityConstraints(const std::vector<CGT::Full_point> & pts);
 
 #include "ConvexityConstraint_3.hxx"
 }

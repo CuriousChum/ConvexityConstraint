@@ -45,8 +45,7 @@ protected:
 
 Output : a constraint, for each tagged domain edge. It is implemented as a resampled one-dimensional convexity constraint
  */
-//std::vector< std::pair<int, std::unique_ptr<ConstraintType> > >
-std::map< int, std::unique_ptr<ConstraintType> >
+std::map<FlagType, std::unique_ptr<ConstraintType> >
 BoundaryConvexityConstraints(const std::vector<CGAL_Traits::Full_point> & pts);
 
 

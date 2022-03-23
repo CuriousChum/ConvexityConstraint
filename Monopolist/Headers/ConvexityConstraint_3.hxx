@@ -171,3 +171,59 @@ void ConvexityConstraint::PrintSelf(std::ostream & os) const {
     ConstraintType::PrintSelf(os);
     os << "}";
 }
+
+// %%%%%%%%%%%%%%%%% Boundary constraints %%%%%%%%%%%%%%%
+std::map<FlagType, std::unique_ptr<ConstraintType> >
+BoundaryConvexityConstraints(const std::vector<CGT::Full_point> & pts){
+	typedef std::bitset<8*sizeof(FlagType)> FlagSet;
+	
+	std::map<FlagType, std::unique_ptr<ConstraintType> > result;
+	std::set<FlagType> edges, faces;
+	for(const CGT::Full_point & p : pts){
+		const FlagType flag = p.second.boundary & ~RoundBoundary;
+		switch(FlagSet(flag).count()){
+			case 1:faces.insert(flag); break;
+			case 2:edges.insert(flag); break;
+		}
+	}
+	
+	for(FlagType edge : edges){
+		std::vector<CGT::Full_point> bpts;
+		for(const CGT::Full_point & p : pts){
+			if((p.second.boundary & edge) == edge) bpts.push_back(p);}
+		
+		// By assumption, these points are aligned. Take two to find the direction.
+		if(bpts.size()<=1) continue;
+		const CGT::Point p0 = bpts[0].first.point();
+		const CGT::Vector _v = bpts[1].first.point() - p0;
+		const CGT::Vector v = _v/sqrt(_v.squared_length());
+		
+		// Get the abcissa and indices associated to the boundary points
+		std::vector<ScalarType> abcissa;
+		std::vector<IndexType> indices;
+		for(const CGT::Full_point & p : bpts){
+			abcissa.push_back( v*(p.first.point()-p0) );
+			indices.push_back( p.second.index );
+		}
+		
+		assert(std::is_sorted(abcissa.begin(),abcissa.end())); // TODO : sort if needed
+		
+		auto cvx1 = std::make_unique<Geometry_1::ConvexityConstraint>(abcissa);
+		auto resampled = std::make_unique<ResampledConstraint>(std::move(cvx1),indices);
+		result.insert({edge,std::move(resampled)});
+	}
+	
+	for(FlagType face : faces){
+		std::vector<CGT::Full_point> bpts;
+		for(const CGT::Full_point & p : pts){
+			if(p.second.boundary & face) bpts.push_back(p);}
+
+		// TODO : Construct an orthogonal basis of the plane spanned
+		assert(false);
+//		const CGT::Vector v0,v1;
+		
+//		std::vector<Geometry_2::Cgal_Traits::Point>
+		
+	}
+	
+}
