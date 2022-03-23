@@ -26,7 +26,7 @@ void ConvexityConstraint::SetValues(const std::vector<ScalarType> & x){
 	numberOfUnknowns = (IndexType) x.size();
     using namespace CGT;
     if(x.size()!=pts.size())
-		throw DataError("Convexity constraint error: Invalid vector size");
+		throw NS::DataError("Convexity constraint error: Invalid vector size");
     for(Full_point & p : pts) {
         const ScalarType w = Parabola(p.first.point()) - x[p.second.index];
         p.first = Weighted_point(p.first.point(),w);

@@ -23,7 +23,7 @@ namespace Geometry_3 {
         virtual const NS::SparseMatrixType & Hessian() override {return hess_;}
         
         
-        void PrintSelf(std::ostream &) const override;
+        void PrintSelf(std::ostream &) const;
         friend std::ostream & operator << (std::ostream & os, const PrincipalAgent & a){
             a.PrintSelf(os); return os;}
         

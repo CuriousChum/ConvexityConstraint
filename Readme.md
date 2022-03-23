@@ -19,7 +19,22 @@ The following open source libraries are needed to compile the provided code. The
 
 Optionally, the Mathematica(R) software can be used to visualize the results, see the provided notebooks.
 
-## Installation
+## Installation and use
+
+To use this software, proceed according to the following steps:
+- Download the current repository.
+- Download the [HamiltonFastMarching repository](https://github.com/Mirebeau/HamiltonFastMarching).
+- Install conda or (preferably) [miniconda](https://docs.conda.io/en/latest/miniconda.html).
+- Open a terminal and cd in the directory containing this `Readme.md` file.
+- Create a conda environnement `conda install -f ConvexityConstraint.yaml`
+- Open the file `common.cmake` and update the `Conda_ConvexityConstraint_Env_Dir` and `HamiltonFastMarching_Source_Dir` paths.
+- Install the [cmake](https://cmake.org) tool.
+- Generate the project of your choice : `Meissner`, `Monopolist`, or both, using cmake. 
+- Compile the project.
+- Run the generated executable. Use the the argument `--help`, to learn about the proper command line arguments.
+- Open the `[Meissner|Monopolist]/Visualization/CommonInitialization.nb` notebook using [Mathematica](https://www.wolfram.com/mathematica/).
+- Setup the binary path in the `CommonInitialization.nb` notebook, and execute it. 
+- Open the visualization notebook of your choice. 
 
 
 <!---

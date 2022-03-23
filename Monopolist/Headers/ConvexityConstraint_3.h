@@ -27,7 +27,8 @@ protected:
 	const ScalarType degen;
 	std::vector<TensorCoef> hessian;
 };
-    
+
+#pragma message("Implementation incomplete function")
 std::map<FlagType, std::unique_ptr<ConstraintType> >
 BoundaryConvexityConstraints(const std::vector<CGT::Full_point> & pts);
 

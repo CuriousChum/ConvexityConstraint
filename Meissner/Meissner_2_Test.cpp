@@ -7,6 +7,8 @@
 //
 
 #include <fstream>
+
+#include "../Monopolist/Headers/MainHelp.h"
 #include "Headers/Meissner_2.h"
 #include "nlopt.hpp"
 
@@ -23,7 +25,8 @@ namespace Meissner_2_Test {
 	  - delta : a small parameter defining the initial condition, which is a perturbation of the sphere of radius 1/2.
 	 (Setting delta = 0 fails, since the sphere of radius 1/2 is a stationnary point.)
 	 */
-    void OptimizeMeissner2(int n=20, ScalarType delta=0.05){
+    void OptimizeMeissner2(int n=20, ScalarType delta=0.05,
+						   std::string filename="Meissner_2.txt"){
         Minkowski_2::Functional mink;
         G::VectorList & pts = mink.pts;
         
@@ -62,7 +65,7 @@ namespace Meissner_2_Test {
 		std::cout << result << std::endl;
         std::cout << "Opt end\n";
         
-        std::ofstream os; os.open("Meissner_2.txt");
+        std::ofstream os; os.open(filename);
         os << "{"
         ExportVarArrow(minimum)
         ExportVarArrow(result)
@@ -76,6 +79,22 @@ namespace Meissner_2_Test {
 
 
 int main(int argc, const char * argv[]) {
-    Meissner_2_Test::OptimizeMeissner2(200,0.05);
+	
+	if(MainHelp(argc, argv,
+				"Solve a two dimensional instance of Meissner's problem.\n"
+				"Solution is known as the Reulaux triangle.\n"
+				"Command line arguments (in order, all optional)\n"
+				" - n : integer, the number of discretization points\n"
+				" - delta : real, a small parameter defining the initial guess\n"
+				)) return;
+
+	--argc; ++argv; // The first argument, which is the executable name, can be ignored.
+	const std::string filename = "Meissner_2" +ArgsToString(argc, argv)+".txt";
+	
+	const int        n = argc-->0 ? atoi(*argv++) : 200;
+	const double delta = argc-->0 ? atof(*argv++) : 0.05;
+	
+
+    Meissner_2_Test::OptimizeMeissner2(n,delta,filename);
     return 0;
 }

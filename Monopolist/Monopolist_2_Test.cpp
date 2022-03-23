@@ -8,6 +8,7 @@
 
 #include <fstream>
 
+#include "Headers/MainHelp.h"
 
 #include "Headers/PrincipalAgent_2.h"
 #include "Headers/ConvexityConstraint_2.h"
@@ -322,13 +323,22 @@ namespace PrincipalAgent_Test {
 
 int main(int argc, const char * argv[]){
 	
-	// Example input args : 30 Triangle 0. 1. 1., see arguments description below
+	if(MainHelp(argc, argv,
+				"Solve the classical monopolist problem, with quadratic cost, "
+				"on a domain defined as geometrical shape.\n"
+				"All arguments are optional (they have default values). "
+				"They must be given in the following order : "
+				" - n : integer, the inverse approximate mesh size.\n"
+				" - shape : [Triangle,Square,Circle], the domain shape.\n"
+				" - theta : real, the shape rotation.\n"
+				" - bary_x : real, the x-coordinate of the shape barycenter.\n"
+				" - bary_y : real, the y-coordinate of the shape barycenter.\n"
+				"\n Example input args : 30 Triangle 0. 1. 1.\n")) return;
+	
 	--argc; ++argv; // The first argument, executable name, can be ignored.
 	// Output filename repeats the arguments.
-	std::ostringstream filename; filename << "Monopolist";
-	for(int i=0; i<argc; ++i) filename << "_" << argv[i];
-	filename << ".txt";
-
+	const std::string filename = "Monopolist"+ArgsToString(argc, argv)+".txt";
+	
 	// Import all arguments
 	using namespace Geometry_2;
 	const int n = argc-->0 ? atoi(*argv++) : 30;
@@ -338,7 +348,7 @@ int main(int argc, const char * argv[]){
 	const ScalarType bary_y = argc-->0 ? atof(*argv++) : Infinity;
 
 //	std::string filename = "Monopolist_"+std::to_string(n)+"_"+enumToRealString(shape)+".txt";
-	PrincipalAgent_Test::Monopolist(MakeShape(n,shape,theta,{bary_x,bary_y}),filename.str());
+	PrincipalAgent_Test::Monopolist(MakeShape(n,shape,theta,{bary_x,bary_y}),filename);
 	
 ///	PrincipalAgent_Test::PA0(30 , PrincipalAgent_Test::ShapeType::Triangle);
 		

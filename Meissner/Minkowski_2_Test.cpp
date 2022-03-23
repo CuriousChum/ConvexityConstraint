@@ -102,6 +102,13 @@ namespace Minkowski_2_Test {
 
 int main(int argc, const char * argv[]) {
 
+	std::cout << "Use --help as first argument to learn about usage.\n";
+	if(argc>=2 && !strcmp(argv[1],"--help")){
+		std::cout <<
+		"This executable is currently untested and in development.\n"
+		;
+	};
+
     Minkowski_2_Test::Test2(); 
 
 }

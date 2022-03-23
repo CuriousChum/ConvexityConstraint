@@ -171,6 +171,13 @@ namespace Minkowski_3_Test {
 
 int main(int argc, const char * argv[]) {
 
+	std::cout << "Use --help as first argument to learn about usage.\n";
+	if(argc>=2 && !strcmp(argv[1],"--help")){
+		std::cout <<
+		"This executable is currently untested and in development.\n"
+		;
+	};
+
     Minkowski_3_Test::Test1();
     
 //    Minkowski_3_Test::MinkowskiInterpolate({&Minkowski_3_Test::octahedronEqns, &Minkowski_3_Test::tetraEqns},30);

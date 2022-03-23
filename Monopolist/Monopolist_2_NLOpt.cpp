@@ -9,6 +9,7 @@
 #ifndef CGalTest_PrincipalAgent_NLOpt_h
 #define CGalTest_PrincipalAgent_NLOpt_h
 
+#include "Headers/MainHelp.h"
 
 #include "PrincipalAgent_Test.h"
 #include "nlopt.hpp"
@@ -132,7 +133,9 @@ namespace PrincipalAgent_Test {
 
 
 int main(int argc, const char * argv[]){
-
+	
+	if(MainHelp(argc, argv)) return;
+	
 	PrincipalAgent_Test::PALinear2(PrincipalAgent_Test::MakeShape(10,PrincipalAgent_Test::ShapeType::Square),
 								  1, "PARef2_Square_Linear");
 	
