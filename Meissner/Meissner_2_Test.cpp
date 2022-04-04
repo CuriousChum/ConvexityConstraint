@@ -86,7 +86,7 @@ int main(int argc, const char * argv[]) {
 				"Command line arguments (in order, all optional)\n"
 				" - n : integer, the number of discretization points\n"
 				" - delta : real, a small parameter defining the initial guess\n"
-				)) return;
+				)) return EXIT_SUCCESS;
 
 	--argc; ++argv; // The first argument, which is the executable name, can be ignored.
 	const std::string filename = "Meissner_2" +ArgsToString(argc, argv)+".txt";

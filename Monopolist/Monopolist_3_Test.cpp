@@ -167,7 +167,7 @@ namespace PrincipalAgent_3_Test {
 
 int main(int argc, const char * argv[]){
 	
-	if(MainHelp(argc, argv)) return;
+	if(MainHelp(argc, argv)) return EXIT_SUCCESS;
 	
 	using namespace PrincipalAgent_3_Test;
 	Monopolist(MakeShape(20,ShapeType::Cube),"PAO_3D_Cube.txt");

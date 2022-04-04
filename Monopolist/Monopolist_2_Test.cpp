@@ -333,7 +333,7 @@ int main(int argc, const char * argv[]){
 				" - theta : real, the shape rotation.\n"
 				" - bary_x : real, the x-coordinate of the shape barycenter.\n"
 				" - bary_y : real, the y-coordinate of the shape barycenter.\n"
-				"\n Example input args : 30 Triangle 0. 1. 1.\n")) return;
+				"\n Example input args : 30 Triangle 0. 1. 1.\n")) return EXIT_SUCCESS;
 	
 	--argc; ++argv; // The first argument, executable name, can be ignored.
 	// Output filename repeats the arguments.

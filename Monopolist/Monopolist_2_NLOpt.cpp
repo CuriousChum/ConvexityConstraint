@@ -134,7 +134,7 @@ namespace PrincipalAgent_Test {
 
 int main(int argc, const char * argv[]){
 	
-	if(MainHelp(argc, argv)) return;
+	if(MainHelp(argc, argv)) return EXIT_SUCCESS;
 	
 	PrincipalAgent_Test::PALinear2(PrincipalAgent_Test::MakeShape(10,PrincipalAgent_Test::ShapeType::Square),
 								  1, "PARef2_Square_Linear");

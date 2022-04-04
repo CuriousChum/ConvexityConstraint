@@ -34,9 +34,7 @@ namespace Geometry_3 {
         
     };
 
-    
 #include "PrincipalAgent_3.hxx"
-    
 }
 
 
