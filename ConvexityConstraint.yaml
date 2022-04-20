@@ -5,4 +5,4 @@ dependencies:
  - python=3.6
  - cgal=4.9 # Compatibility was broken since original code in 2015
  - nlopt=2.4.2 # Somehow works better for my application
- - eigen
+ - eigen # Maybe try 3.2.7, which dates from 2015, for Monopolist_3

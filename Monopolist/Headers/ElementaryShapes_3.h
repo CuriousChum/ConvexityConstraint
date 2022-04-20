@@ -30,7 +30,7 @@ enum class ShapeType {Cube};
   - theta (optional) : rotation of the shape (around its barycenter}, given as Euler angles
   - bary (optional) : barycenter of the shape
  */
-#pragma message("Feature incomplete function")
+#pragma message("Feature incomplete function (add more shapes)")
 std::vector<CGT::Full_point>
 MakeShape(int n, ShapeType shape){
 	//,PointType theta={0.,0.,0.}, PointType bary={Infinity,Infinity,Infinity}
@@ -50,7 +50,6 @@ MakeShape(int n, ShapeType shape){
 			const CGT::Vector ei(h,0,0), ej(0,h,0), ek(0,0,h);
 			const CGT::Point origin(1.+0.5*h, 1.+0.5*h, 1.+0.5*h);
 			
-			std::vector<CGT::Full_point> pts;
 			int counter=0;
 			for(int i=0; i<n; ++i)
 				for(int j=0; j<n; ++j)
@@ -65,7 +64,7 @@ MakeShape(int n, ShapeType shape){
 			break;}
 	
 	} // switch
-	
+
 	return pts;
 } // MakeShape
 } // namespace Geometry_3

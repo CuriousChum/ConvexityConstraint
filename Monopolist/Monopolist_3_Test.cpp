@@ -9,6 +9,8 @@
 #ifndef CGalTest_PrincipalAgent_3_Test_h
 #define CGalTest_PrincipalAgent_3_Test_h
 
+#include "Headers/MainHelp.h"
+
 #include "Headers/Geometry_3.h"
 #include "Headers/ConvexityConstraint_3.h"
 #include "Headers/PrincipalAgent_3.h"
@@ -42,9 +44,8 @@ namespace PrincipalAgent_3_Test {
         NS::VectorType xx(pts.size());
         for(int i=0; i<pts.size(); ++i)
             xx[i]=CGT::Parabola( pts[i].first.point() );
-        
+		        
         // Setup constraints and objective
-        
         PositivityConstraint pos;
         ConvexityConstraint cvx(pts);
         std::vector<NS::Functionnal*> constraints = {&cvx,&pos};
@@ -72,7 +73,7 @@ namespace PrincipalAgent_3_Test {
         newton.multiplier = 1./pts.size();
         //newton.multiplierBound = eps*newton.multiplier;
         newton.multiplierBound = 4e-7; //1.5e-05;
-        
+//        newton.opt.sDelta.stopBelow = 1e-4;
         
         newton.Solve(pa,xx,constraints);
         
