@@ -38,6 +38,7 @@ Set(GmpLib   "${CondaDir}/lib/libgmp.dylib")    # GMP
 # --- Set header paths ---
 Set(ExternalHeadersDir
 	"${CondaDir}/include/eigen3"   # Eigen
+#	"/Users/mirebeau/Dropbox/Programmes/2022/eigen-3.2.3"
 	"${CondaDir}/include"          # CGAL and NLOPT
 	"${HamiltonFastMarching_Source_Dir}/JMM_CPPLibs"  # A few personnal classes and macros used
 	)

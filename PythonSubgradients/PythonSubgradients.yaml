@@ -1,0 +1,6 @@
+name: PythonSubgradients
+channels:
+  - conda-forge
+dependencies:
+ - python
+ - cgal

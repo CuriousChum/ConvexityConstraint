@@ -90,7 +90,7 @@ void NewtonUnconstrained::Solve(Functionnal & pb, VectorType & x){
         
         ScalarType delta=1;
         ScalarType val = Infinity;
-        
+		        
         if(dampingStrategy==DampingType::Increasing){
             
             val = SafeValue(pb,x-dir);

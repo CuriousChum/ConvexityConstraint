@@ -27,6 +27,46 @@ void PositivityConstraint::ComputeValJacHess(FlagType r){
     }
 }
 
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%% Bounds %%%%%%%%%%%%%%%%%%%%%%%%%
+
+void BoundConstraint::Init(){
+	if(lb.size() != ub.size())
+		throw NS::DomainError("Bound constraint : different number of bounds");
+	numberOfUnknowns = (IndexType)lb.size();
+	numberOfConstraints=0;
+	for(const ScalarType & x:lb) numberOfConstraints += (x > -Infinity);
+	for(const ScalarType & x:ub) numberOfConstraints += (x <  Infinity);
+}
+
+void BoundConstraint::SetValues(const std::vector<ScalarType> & val_){
+    val = val_;
+	for(IndexType i=0; i<numberOfUnknowns; ++i){
+		if(!(lb[i]<val[i] && val[i]<ub[i])){
+			std::cout
+			ExportVarArrow(i)
+			ExportVarArrow(val[i])
+			ExportVarArrow(lb[i])
+			ExportVarArrow(ub[i]) << std::endl;
+			throw NS::DomainError("BoundConstraint : data must be strictly within bounds");}
+	}
+};
+
+
+void BoundConstraint::ComputeValJacHess(FlagType r){
+    if(r & RValues) values.reserve(numberOfConstraints);
+    if(r & RJacobian) jacobian.reserve(numberOfConstraints);
+    for(int i=0 ; i<numberOfUnknowns; ++i) {
+		if(lb[i] > -Infinity){
+			if(r & RValues) values.push_back(val[i]-lb[i]);
+			if(r & RJacobian) jacobian.push_back({i,i,1});
+		}
+		if(ub[i] < Infinity){
+			if(r & RValues) values.push_back(ub[i]-val[i]);
+			if(r & RJacobian) jacobian.push_back({i,i,-1});
+		}
+    }
+}
+
 // %%%%%%%%%%%%%%%%%%%%%% Resampled constraint %%%%%%%%%%%%%%%%%%%
 
 ResampledConstraint::

@@ -22,9 +22,12 @@ void PrincipalAgent::MakeObjective(){
         fIt!=fEnd; ++fIt){
         
         // Eliminate flat triangles
-        if(fIt->vertex(0)->info().boundary &
+        if((fIt->vertex(0)->info().boundary &
            fIt->vertex(1)->info().boundary &
-           fIt->vertex(2)->info().boundary) continue;
+           fIt->vertex(2)->info().boundary) ||
+		   (fIt->vertex(0)->info().boundary==ExcludedBoundary ||
+			fIt->vertex(1)->info().boundary==ExcludedBoundary ||
+			fIt->vertex(2)->info().boundary==ExcludedBoundary) ) continue;
         
         const Point barycenter = CGAL::barycenter(fIt->vertex(0)->point(), 1./3.,
                                                   fIt->vertex(1)->point(), 1./3.,

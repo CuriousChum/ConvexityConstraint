@@ -45,9 +45,6 @@ set(Project_Headers_3
 
 	${HeadersDir}/PrincipalAgent_3.h
 	${HeadersDir}/PrincipalAgent_3.hxx
-
-	${HeadersDir}/Geometry_3.h
-	${HeadersDir}/Geometry_3.hxx
 )
 
 

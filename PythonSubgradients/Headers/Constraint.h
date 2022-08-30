@@ -12,20 +12,31 @@
 #include <iostream>
 
 #include <numeric>
-#include "NewtonSolvers.h"
+//#include "NewtonSolvers.h"
 
 namespace Constraint {
 
-namespace NS = NewtonSolvers;
-
-typedef NS::ScalarType ScalarType;
+typedef double ScalarType;
 typedef int IndexType;
 typedef unsigned int FlagType; // Conjunction of requests
+
 
 const ScalarType Infinity = std::numeric_limits<ScalarType>::infinity();
 const IndexType BadIndex = std::numeric_limits<IndexType>::max();
 const IndexType InfiniteIndex = BadIndex-1;
-const FlagType RoundBoundary = 1<<31, ExcludedBoundary = 1<<30;
+//const FlagType RoundBoundary = 1<<31, ExcludedBoundary = 1<<30;
+
+
+struct InfoType { // Additional info for each vertex
+	IndexType index=BadIndex;
+	bool boundary=false;
+	// FlagType boundary=0;
+	// InfoType(IndexType index_, IndexType boundary_):index(index_), boundary(boundary_){};
+	// InfoType(){};
+	bool OnBoundary() const {return boundary;}
+	friend std::ostream & operator << (std::ostream & os, const InfoType & p){
+		return os << "{" << p.index << "," << p.OnBoundary() << "}";}
+ };
 
 typedef std::pair<IndexType, ScalarType> VecCoef;
 struct MatCoef;
@@ -47,7 +58,7 @@ void NLog(ScalarType & val, std::vector<VecCoef> & g, std::vector<MatCoef> & h);
  Only SetValues and ComputeValJacHess need to be specialized in the subclass.
  */
 
-struct ConstraintType : NS::Functionnal {
+struct ConstraintType {
 	enum Request {
 		RLogSum = 1<<0, RLogGrad = 1<<1, RLogHessian = 1<<2,
 		RValues = 1<<3, RJacobian = 1<<4, RHessian = 1<<5
@@ -68,12 +79,7 @@ struct ConstraintType : NS::Functionnal {
 	std::vector<MatCoef> jacobian;
 	std::vector<TensorCoef> hessian;
 	
-	// Glue code : Barrier for the constraint
-	virtual ScalarType Value(const NS::VectorType &) override;
-	virtual const NS::VectorType & Gradient() override; // At latest position.
-	virtual const NS::SparseMatrixType & Hessian() override;
-	
-	virtual std::string Name() const override {return "Unspecified constraint name";}
+	virtual std::string Name() const {return "Unspecified constraint name";}
 	virtual void PrintSelf(std::ostream & os) const;
 	friend std::ostream & operator << (std::ostream & os, const ConstraintType & c){
 		c.PrintSelf(os); return os;}
@@ -90,9 +96,7 @@ protected:
 	{throw "ConstraintType::ComputeValJacHess error : must be specialized";}
 	
 	/// Compute the value, jacobian and hessian of the barrier, defined as the sum of the logarithms of the constraint
-	virtual void ComputeLogarithms(FlagType);
-	
-	NS::VectorType grad_; NS::SparseMatrixType hess_;
+	virtual void ComputeLogarithms(FlagType);	
 };
 
 #include "Constraint.hxx"

@@ -21,6 +21,16 @@ protected:
 	std::vector<ScalarType> val;
 };
 
+struct BoundConstraint : ConstraintType {
+	std::vector<ScalarType> lb,ub;
+	void Init();
+	virtual void SetValues(const std::vector<ScalarType> &) override;
+	virtual void ComputeValJacHess(FlagType) override;
+	virtual std::string Name() const override {return "PositivityConstraint";}
+protected:
+	std::vector<ScalarType> val;
+};
+
 /**
  Defines a (log barrier for a) constraint applied to a subset of indices.
  F( x_{i_k}; 0<=k<K ) > 0,
