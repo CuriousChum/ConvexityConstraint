@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <cstring>
 #include <sstream>
 
 ///Display a help message, if required. retval : wether the help was displayed

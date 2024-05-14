@@ -430,8 +430,8 @@ int main(int argc, const char * argv[]){
 	const ScalarType bary_y = argc-->0 ? atof(*argv++) : Infinity;
 	
 	//	std::string filename = "Monopolist_"+std::to_string(n)+"_"+enumToRealString(shape)+".txt";
-//	PrincipalAgent_Test::Monopolist(MakeShape(n,shape,theta,{bary_x,bary_y}),filename);
-	PrincipalAgent_Test::Monopolist_NoBound(MakeShape(n,shape,theta,{bary_x,bary_y}),filename);
+	PrincipalAgent_Test::Monopolist(MakeShape(n,shape,theta,{bary_x,bary_y}),filename);
+	// PrincipalAgent_Test::Monopolist_NoBound(MakeShape(n,shape,theta,{bary_x,bary_y}),filename);
 	
 	///	PrincipalAgent_Test::PA0(30 , PrincipalAgent_Test::ShapeType::Triangle);
 	
