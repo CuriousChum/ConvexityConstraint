@@ -8,6 +8,11 @@
 //
 
 // %%%%%%%%%%%%%%% Functionnal interface to NLOPT %%%%%%%%%%%%%%%
+//
+
+#include "NewtonSolvers.h"
+
+using namespace NewtonSolvers;
 
 ScalarType Functionnal::Evaluate(const std::vector<ScalarType> & x,
 								 std::vector<ScalarType> & grad, void* data){
@@ -93,28 +98,30 @@ void NewtonUnconstrained::Solve(Functionnal & pb, VectorType & x){
 		        
         if(dampingStrategy==DampingType::Increasing){
             
-            val = SafeValue(pb,x-dir);
+            val = SafeValue(pb, x - dir);
             while(delta >= sDelta.stopBelow){
-                delta/=2;
+                delta /= 2;
 				
                 const ScalarType cmp = SafeValue(pb,x-delta*dir);
                 
                 if(runtimeOut)
                     (*runtimeOut) << " Tried " ExportVarArrow(delta)
-					<< " got " ExportVarArrow(cmp) << "\n";
-				
+				  << " got " ExportVarArrow(cmp) << "\n";
+
                 if(cmp!=Infinity && cmp > val){
                     delta *= 2;
                     x = x-delta*dir;
                     val = pb.Value(x); // No safety net here (value already tried)
                     break;
-				} else {
-					val = cmp;}
+		}
+                else {
+		    val = cmp;
+                }
             }
         } else { // Valid
             
             while(delta >= sDelta.stopBelow &&
-                  (val = SafeValue(pb,x-delta*dir) ) > sObjective.values.back()){
+                  ( val = SafeValue(pb, x - delta * dir) ) > sObjective.values.back()){
                 if(runtimeOut)
                     (*runtimeOut) << " Tried " ExportVarArrow(delta) << " got " ExportVarArrow(val) << "\n";
                 delta *= dampingRatio;
@@ -152,7 +159,8 @@ void NewtonUnconstrained::Solve(Functionnal & pb, VectorType & x){
 /*            std::cout << "Aborting "
             ExportVarArrow(q)
             << "\n";*/
-            break;}
+            break;
+        }
     }
 }
 
@@ -214,11 +222,11 @@ const SparseMatrixType & NewtonConstrained::Hessian(){
 void NewtonConstrained::Solve(Functionnal & objective_,
                               VectorType & x,
                               std::vector<Functionnal*> barriers_){
-    objective=&objective_;
-    barriers=barriers_;
+    objective = &objective_;
+    barriers  = barriers_;
     
-    while (multiplier>=multiplierBound) {
-        if(runtimeOut){
+    while (multiplier >= multiplierBound) {
+        if(runtimeOut) {
             (*runtimeOut) << "\nNewton constrained, "
             ExportVarArrow(multiplier)
 //            ExportVarArrow(opt)
@@ -226,14 +234,14 @@ void NewtonConstrained::Solve(Functionnal & objective_,
         }
 
         opt.Clear();
-        opt.sGHNorm.stopBelow = multiplier*ghNormBase;
+        opt.sGHNorm.stopBelow = multiplier * ghNormBase;
         const VectorType x_save = x;
-        opt.Solve(*this,x);
-        
+        opt.Solve(*this, x);
+
         iter += opt.iter;
-        multiplier*=multiplierDamping;
-        
-        if(opt.sObjective.values.back()==Infinity){
+        multiplier *= multiplierDamping;
+
+        if(opt.sObjective.values.back() == Infinity) {
             std::cout << "Aborting optimization (infinite objective).\n";
             x=x_save;
             break;}
@@ -244,7 +252,7 @@ void NewtonConstrained::Solve(Functionnal & objective_,
             std::cout << "Aborting (maxIter).\n";
             break;}
     }
-    
+
     std::cout << "Finishing optimization.\n";
 }
 

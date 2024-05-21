@@ -1,8 +1,4 @@
-//
-//  PrincipalAgent_Test.h
-//  CGalTest
-//
-//  Created by Jean-Marie Mirebeau on 11/02/2015.
+// PrincipalAgent_Test.h CGalTest Created by Jean-Marie Mirebeau on 11/02/2015.
 //  Copyright (c) 2015 Jean-Marie Mirebeau. All rights reserved.
 //
 
@@ -10,6 +6,7 @@
 
 //#include "Headers/DispatchAndRun.h"
 
+#include "Headers/Geometry_2.h"
 #include "Headers/MainHelp.h"
 
 #include "Headers/PrincipalAgent_2.h"
@@ -410,12 +407,16 @@ int main(int argc, const char * argv[]){
 				"on a domain defined as geometrical shape.\n"
 				"All arguments are optional (they have default values). "
 				"They must be given in the following order : "
-				" - n : integer, the inverse approximate mesh size.\n"
-				" - shape : [Triangle,Square,Circle], the domain shape.\n"
-				" - theta : real, the shape rotation.\n"
-				" - bary_x : real, the x-coordinate of the shape barycenter.\n"
-				" - bary_y : real, the y-coordinate of the shape barycenter.\n"
-				"\n Example input args : 30 Triangle 0. 1. 1.\n")) return EXIT_SUCCESS;
+				" - n : integer, the inverse approximate mesh size. (default: 10)\n"
+				" - shape : [Triangle, Square, Circle, Rectangle], the domain shape. (default: Triangle)\n"
+				" [Only for Rectangle]\n"
+				"		-height: real, the height of the rectangle. (default: 1.)\n"
+				"		-width : real, the width of the rectangle. (default: 2.)\n"
+				" - theta : real, the shape rotation. (default: 0.)\n"
+				" - bary_x : real, the x-coordinate of the shape barycenter. (default: barycenter of a regular triangle)\n"
+				" - bary_y : real, the y-coordinate of the shape barycenter. (default: barycenterof a regular triangle)\n"
+				"\n Example input args : 30 Triangle 0. 1. 1.\n")) 
+		return EXIT_SUCCESS;
 	
 	--argc; ++argv; // The first argument, executable name, can be ignored.
 	// Output filename repeats the arguments.
@@ -423,14 +424,26 @@ int main(int argc, const char * argv[]){
 	
 	// Import all arguments
 	using namespace Geometry_2;
-	const int n = argc-->0 ? atoi(*argv++) : 10;
-	const ShapeType shape   = argc-->0 ? enumFromString<ShapeType>(*argv++) : ShapeType::Triangle;
-	const ScalarType theta  = argc-->0 ? atof(*argv++) : 0.;
-	const ScalarType bary_x = argc-->0 ? atof(*argv++) : Infinity;
-	const ScalarType bary_y = argc-->0 ? atof(*argv++) : Infinity;
-	
+
+	const int n = argc-- > 0 ? atoi(*argv++) : 10;
+	const ShapeType shape_t   = argc-- > 0 ? enumFromString<ShapeType>(*argv++) : ShapeType::Triangle;
+
+	ScalarType height, width;
+	if (shape_t == ShapeType::Rectangle) {
+		 height = argc-- > 0 ? atof(*argv++) : 1.;
+		 width = argc-- > 0 ? atof(*argv++) : 2.;
+	}
+	const ScalarType theta  = argc-- > 0 ? atof(*argv++) : 0.;
+	const ScalarType bary_x = argc-- > 0 ? atof(*argv++) : Infinity;
+	const ScalarType bary_y = argc-- > 0 ? atof(*argv++) : Infinity;
+
+		
+	std::vector<CGT::Full_point> shape = shape_t != ShapeType::Rectangle 
+										 ? MakeShape(n, shape_t, theta, {bary_x, bary_y})
+										 : MakeShape(n, shape_t, theta, {bary_x, bary_y}, height, width);
 	//	std::string filename = "Monopolist_"+std::to_string(n)+"_"+enumToRealString(shape)+".txt";
-	PrincipalAgent_Test::Monopolist(MakeShape(n,shape,theta,{bary_x,bary_y}),filename);
+	PrincipalAgent_Test::Monopolist(shape, filename);
+	// PrincipalAgent_Test::Monopolist_NoBound(shape, filename);
 	// PrincipalAgent_Test::Monopolist_NoBound(MakeShape(n,shape,theta,{bary_x,bary_y}),filename);
 	
 	///	PrincipalAgent_Test::PA0(30 , PrincipalAgent_Test::ShapeType::Triangle);

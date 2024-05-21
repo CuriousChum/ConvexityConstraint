@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     19284,        487]
-NotebookOptionsPosition[     18921,        469]
-NotebookOutlinePosition[     19278,        485]
-CellTagsIndexPosition[     19235,        482]
+NotebookDataLength[     19747,        494]
+NotebookOptionsPosition[     19183,        476]
+NotebookOutlinePosition[     19575,        492]
+CellTagsIndexPosition[     19532,        489]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -23,7 +23,9 @@ Cell[CellGroupData[{
 Cell["\<\
 Common initialization for visualization of the principal agent problem.\
 \>", "Title",
- CellChangeTimes->{{3.85661444852757*^9, 3.856614468653913*^9}}],
+ CellChangeTimes->{{3.85661444852757*^9, 
+  3.856614468653913*^9}},ExpressionUUID->"b11bb948-bcd6-4c55-99e6-\
+3bfaabce0ae7"],
 
 Cell["\<\
 Display numerical solutions of the principal agent problem.
@@ -31,12 +33,15 @@ Display numerical solutions of the principal agent problem.
 Original file :  \
 /Users/mirebeau/Dropbox/Shared/Quentin/SubgradientBarrier/Mathematica/CGAL0.nb\
 \>", "Text",
- CellChangeTimes->{{3.856614560423358*^9, 3.856614589135436*^9}}],
+ CellChangeTimes->{{3.856614560423358*^9, 
+  3.856614589135436*^9}},ExpressionUUID->"dbbe33d3-5251-4f30-8516-\
+89cacdca2579"],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{"(*", 
-   RowBox[{"!!", " ", 
+   RowBox[{
+    RowBox[{"!", "!"}], " ", 
     RowBox[{"To", " ", 
      RowBox[{"user", " ", ":", " ", 
       RowBox[{"Update", " ", "this", " ", 
@@ -45,8 +50,8 @@ Cell[BoxData[
    RowBox[{
     RowBox[{
     "MonopolistBinDir", " ", "=", " ", 
-     "\"\</Users/mirebeau/bin/ConvexityConstraint/Monopolist/Debug\>\""}], 
-    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     "\"\</home/vboxuser/programming/cpp/ConvexityConstraint\>\""}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
      RowBox[{"ImportFromTxt", "[", "filePath_", "]"}], ":=", " ", 
@@ -67,8 +72,8 @@ Cell[BoxData[
     RowBox[{
      RowBox[{"ShowCvx", "[", 
       RowBox[{"data_", ",", 
-       RowBox[{"withVal_:", "False"}], ",", 
-       RowBox[{"withMat_:", "False"}]}], "]"}], ":=", 
+       RowBox[{"withVal_", ":", "False"}], ",", 
+       RowBox[{"withMat_", ":", "False"}]}], "]"}], ":=", 
      RowBox[{"Module", "[", 
       RowBox[{
        RowBox[{"{", "\[IndentingNewLine]", 
@@ -451,27 +456,29 @@ Cell[BoxData[
        RowBox[{"Print", "[", 
         RowBox[{"points", ",", "constraints"}], "]"}], ";"}], "*)"}], 
      "\[IndentingNewLine]", "]"}]}]}]}]], "Input",
- CellChangeTimes->{{3.6506208290579557`*^9, 3.650620940702838*^9}, {
+ CellChangeTimes->{{3.650620829057956*^9, 3.650620940702838*^9}, {
    3.6506209792800837`*^9, 3.650621035590554*^9}, {3.650794576681533*^9, 
    3.650794580440733*^9}, {3.650794657879362*^9, 3.650794748920055*^9}, {
-   3.650794796628632*^9, 3.6507949844256277`*^9}, {3.650795079175344*^9, 
+   3.650794796628632*^9, 3.650794984425628*^9}, {3.650795079175344*^9, 
    3.650795158331512*^9}, 3.85661432914116*^9, {3.8566143919231367`*^9, 
-   3.856614394710495*^9}, {3.856614602737438*^9, 3.8566146126488028`*^9}, {
+   3.856614394710495*^9}, {3.856614602737438*^9, 3.8566146126488023`*^9}, {
    3.8566146453790007`*^9, 3.856614652860072*^9}, {3.856614938395702*^9, 
    3.856614940912088*^9}, {3.856614993071085*^9, 3.856615032923571*^9}, {
-   3.856616015351883*^9, 3.856616020053938*^9}, {3.8566162879753323`*^9, 
+   3.856616015351883*^9, 3.856616020053938*^9}, {3.8566162879753327`*^9, 
    3.856616288116651*^9}, {3.856618898471385*^9, 3.856618899763332*^9}, {
    3.856841810838624*^9, 3.856841851825884*^9}, {3.856956845703404*^9, 
-   3.8569568471215067`*^9}, {3.856959624319915*^9, 3.856959626411056*^9}, {
+   3.856956847121507*^9}, {3.856959624319915*^9, 3.856959626411056*^9}, {
    3.856959679112686*^9, 3.856959682542576*^9}, {3.856976858259584*^9, 
-   3.8569768607656183`*^9}, {3.856979567036262*^9, 3.8569795683339033`*^9}}]
+   3.8569768607656183`*^9}, {3.856979567036262*^9, 3.8569795683339033`*^9}, {
+   3.925241724875931*^9, 3.925241774280345*^9}},
+ CellLabel->"In[7]:=",ExpressionUUID->"f984b922-e240-4828-a192-e59f91f24518"]
 }, Open  ]]
 },
-WindowSize->{857, 878},
+WindowSize->{903, 555},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
-FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September \
-21, 2016)",
-StyleDefinitions->"Default.nb"
+FrontEndVersion->"14.0 for Linux x86 (64-bit) (December 12, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"c2869913-bdf3-4e33-89ec-c65a314b4906"
 ]
 (* End of Notebook Content *)
 
@@ -485,9 +492,9 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 161, 3, 148, "Title"],
-Cell[744, 27, 250, 6, 68, "Text"],
-Cell[997, 35, 17908, 431, 2023, "Input"]
+Cell[580, 22, 221, 5, 160, "Title",ExpressionUUID->"b11bb948-bcd6-4c55-99e6-3bfaabce0ae7"],
+Cell[804, 29, 310, 8, 81, "Text",ExpressionUUID->"dbbe33d3-5251-4f30-8516-89cacdca2579"],
+Cell[1117, 39, 18050, 434, 1928, "Input",ExpressionUUID->"f984b922-e240-4828-a192-e59f91f24518"]
 }, Open  ]]
 }
 ]

@@ -12,7 +12,7 @@
 #define TRIANGLE_BARYCENTER 1.1053600322580646
 namespace Geometry_2 {
 
-enum class ShapeType {Square, Triangle, Circle, Rect};
+enum class ShapeType {Square, Triangle, Circle, Rectangle};
 /**
  Generate a list of points, which regularly sample an elementary shape.
  These point sets usually serve as input to compute a Delaunay triangulation.
@@ -35,7 +35,11 @@ enum class ShapeType {Square, Triangle, Circle, Rect};
  
  */
 std::vector<CGT::Full_point>
-MakeShape(int n, ShapeType shape,ScalarType theta=0., PointType bary={Infinity,Infinity}){
+MakeShape(int n, ShapeType shape,
+		  ScalarType theta=0.,
+		  PointType bary={Infinity,Infinity},
+		  ScalarType _height=0.,
+		  ScalarType _width=0.) {
 	const ScalarType h=1./(n-1);
 	const ScalarType pi = 4.*atan(1.);
 	std::vector<CGT::Full_point> pts;
@@ -95,17 +99,19 @@ MakeShape(int n, ShapeType shape,ScalarType theta=0., PointType bary={Infinity,I
 			bary_y_ = TRIANGLE_BARYCENTER;
 			break;}
 
-		case ShapeType::Rect:
+		case ShapeType::Rectangle:
 			for(int i=0; i<n; ++i)
 				for(int j=0; j<n; ++j){
 					FlagType flag =
 					(i==0 ? 1 : 0) | (j==0 ? 2 : 0) |
 					(i==n-1 ? 4 : 0) | (j==n-1 ? 8 : 0);
-					pts.push_back({WP({1.+2*i*h,1.+j*h},0),
+					pts.push_back({ 
+						WP({ 1. + _height * i * h,
+							 1. + _width  * j * h }, 0),
 						IT(counter++,flag)});
 				}
-			bary_x_ = 2;
-			bary_y_ = 1.5;
+			bary_x_ = _height / 2 + 1;
+			bary_y_ = _width  / 2 + 1;
 			break;
 	}
 	
@@ -132,8 +138,9 @@ MakeShape(int n, ShapeType shape,ScalarType theta=0., PointType bary={Infinity,I
 	return pts;
 }
 
+
 } // namespace Geometry_2
 
 template<>
 char const* enumStrings<Geometry_2::ShapeType>::data[] = { "Square", "Triangle",
-														   "Circle", "Rect" };
+														   "Circle", "Rectangle" };
