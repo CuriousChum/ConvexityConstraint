@@ -6,10 +6,13 @@
 //  Created by Jean-Marie Mirebeau on 18/03/2022.
 //
 
+#include "Geometry_2.h"
 #include "JMM_CPPLibs/Output/EnumToString.h"
+
+#define TRIANGLE_BARYCENTER 1.1053600322580646
 namespace Geometry_2 {
 
-enum class ShapeType {Square, Triangle, Circle};
+enum class ShapeType {Square, Triangle, Circle, Rectangle};
 /**
  Generate a list of points, which regularly sample an elementary shape.
  These point sets usually serve as input to compute a Delaunay triangulation.
@@ -32,7 +35,11 @@ enum class ShapeType {Square, Triangle, Circle};
  
  */
 std::vector<CGT::Full_point>
-MakeShape(int n, ShapeType shape,ScalarType theta=0., PointType bary={Infinity,Infinity}){
+MakeShape(int n, ShapeType shape,
+		  ScalarType theta=0.,
+		  PointType bary={Infinity,Infinity},
+		  ScalarType _height=0.,
+		  ScalarType _width=0.) {
 	const ScalarType h=1./(n-1);
 	const ScalarType pi = 4.*atan(1.);
 	std::vector<CGT::Full_point> pts;
@@ -40,7 +47,7 @@ MakeShape(int n, ShapeType shape,ScalarType theta=0., PointType bary={Infinity,I
 	
 	typedef CGT::Weighted_point WP;
 	typedef CGT::InfoType IT;
-	ScalarType bary_;
+	ScalarType bary_x_, bary_y_;
 	
 	switch (shape) {
 		case ShapeType::Square:
@@ -52,7 +59,8 @@ MakeShape(int n, ShapeType shape,ScalarType theta=0., PointType bary={Infinity,I
 					pts.push_back({WP({1.+i*h,1.+j*h},0),
 						IT(counter++,flag)});
 				}
-			bary_=1.5;
+			bary_x_ = 1.5;
+			bary_y_ = 1.5;
 			break;
 			
 		case ShapeType::Circle:{
@@ -67,7 +75,8 @@ MakeShape(int n, ShapeType shape,ScalarType theta=0., PointType bary={Infinity,I
 						IT(counter++,RoundBoundary)});
 				}
 			}
-			bary_=1.5;
+			bary_x_ = 1.5;
+			bary_y_ = 1.5;
 			break;}
 			
 		case ShapeType::Triangle:{
@@ -86,26 +95,52 @@ MakeShape(int n, ShapeType shape,ScalarType theta=0., PointType bary={Infinity,I
 						IT(counter++,flag)});
 
 				}
-			bary_=1.1053600322580646;
+			bary_x_ = TRIANGLE_BARYCENTER;
+			bary_y_ = TRIANGLE_BARYCENTER;
 			break;}
+
+		case ShapeType::Rectangle:
+			for(int i=0; i<n; ++i)
+				for(int j=0; j<n; ++j){
+					FlagType flag =
+					(i==0 ? 1 : 0) | (j==0 ? 2 : 0) |
+					(i==n-1 ? 4 : 0) | (j==n-1 ? 8 : 0);
+					pts.push_back({ 
+						WP({ 1. + _height * i * h,
+							 1. + _width  * j * h }, 0),
+						IT(counter++,flag)});
+				}
+			bary_x_ = _height / 2 + 1;
+			bary_y_ = _width  / 2 + 1;
+			break;
 	}
 	
 	// Translate and rotate the shape
-	if(bary[0]!=Infinity || bary[1]!=Infinity || theta!=0){
-		for(ScalarType & x : bary) {if(x==Infinity) x=bary_;}
-		ScalarType c=cos(theta), s=sin(theta);
+	if(bary[0] != Infinity || bary[1] != Infinity || theta != 0){
+		for(ScalarType & x : bary) {
+			if(x == Infinity) x = bary_x_;
+		}
+		ScalarType c = cos(theta), s = sin(theta);
 		for(CGT::Full_point & p : pts){
 			auto & q = p.first.point();
-			ScalarType x=q.x(), y=q.y();
-			x-=bary_; y-=bary_;
-			ScalarType xo=x; x = c*x-s*y; y=s*xo+c*y;
-			x+=bary[0]; y+=bary[1];
-			p.first = WP({x,y},0); // CGAL coordinates must remain constant, so a new point is made.
+			ScalarType x = q.x(), y = q.y();
+			x -= bary_x_;
+			y -= bary_y_;
+
+			ScalarType xo = x;
+			x = c*x - s*y;
+			y = s*xo + c*y;
+			x += bary[0];
+			y += bary[1];
+			p.first = WP({ x,y }, 0); // CGAL coordinates must remain constant, so a new point is made.
 		}
 	}
 	return pts;
 }
 
+
 } // namespace Geometry_2
 
-template<> char const* enumStrings<Geometry_2::ShapeType>::data[] = {"Square", "Triangle", "Circle"};
+template<>
+char const* enumStrings<Geometry_2::ShapeType>::data[] = { "Square", "Triangle",
+														   "Circle", "Rectangle" };

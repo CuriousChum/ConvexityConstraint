@@ -1,8 +1,8 @@
 # --- !! TO USER : Change these two paths !! ---
 
 # On JMM's macbook
-SET(Conda_ConvexityConstraint_Env_Dir "/Users/mirebeau/opt/miniconda3/envs/ConvexityConstraint/")
-SET(HamiltonFastMarching_Source_Dir "/Users/mirebeau/Dropbox/Programmes/Github/HamiltonFastMarching")
+SET(Conda_ConvexityConstraint_Env_Dir "/home/vboxuser/miniconda3/envs/ConvexityConstraint/")
+SET(HamiltonFastMarching_Source_Dir "/home/vboxuser/programming/cpp/HamiltonFastMarching")
 
 # The above two paths correspond to:
 # - A ConvexityConstraint conda environment, containing the cgal, nlopt, and eigen packages, using the provided yaml file. This can be done with the following command : conda env create -f ConvexityConstraint.yaml
@@ -30,9 +30,9 @@ set(CondaDir ${Conda_ConvexityConstraint_Env_Dir})
 set(CMAKE_PREFIX_PATH ${CondaDir})
 find_package(CGAL)
 
-Set(CgalLib  "${CondaDir}/lib/libCGAL.dylib")   # CGAL
-Set(NloptLib "${CondaDir}/lib/libnlopt.dylib")  # NLOPT
-Set(GmpLib   "${CondaDir}/lib/libgmp.dylib")    # GMP
+Set(CgalLib  "${CondaDir}/lib/libCGAL.so")   # CGAL
+Set(NloptLib "${CondaDir}/lib/libnlopt.so")  # NLOPT
+Set(GmpLib   "${CondaDir}/lib/libgmp.so")    # GMP
 
 
 # --- Set header paths ---
