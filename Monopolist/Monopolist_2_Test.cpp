@@ -63,7 +63,7 @@ void Monopolist(const PointSet & pts, std::string filename){
 	pa.rt = cvx.rt; // Hope this is a true deep copy.
 	
 	NS::NewtonConstrained newton;
-	newton.maxIter=50;
+	newton.maxIter = 50;
 	//		newton.verbose=true;
 	
 	/*
@@ -97,6 +97,10 @@ void Monopolist(const PointSet & pts, std::string filename){
 	std::cout
 	ExportVarArrow(newton)
 	<< "\n";
+	os.close();
+
+	os.open("cvx.txt");
+	os << cvx.rt;
 }
     
 void Monopolist_NoBound(PointSet pts, std::string filename){

@@ -17,6 +17,8 @@ The following open source libraries are needed to compile the provided code. The
  - The [nlopt](http://ab-initio.mit.edu/nlopt) non-linear optimization routines.
  - The [Eigen](http://eigen.tuxfamily.org/) linear solver.
 
+Additional dependency for visualization below.
+
 Optionally, the Mathematica(R) software can be used to visualize the results, see the provided notebooks.
 
 ## Installation and use
@@ -35,6 +37,13 @@ To use this software, proceed according to the following steps:
 - Open the `[Meissner|Monopolist]/Visualization/CommonInitialization.nb` notebook using [Mathematica](https://www.wolfram.com/mathematica/).
 - Setup the binary path in the `CommonInitialization.nb` notebook, and execute it. 
 - Open the visualization notebook of your choice. 
+
+## Basic Visualization of Gradient and Hessian of Monopolist
+
+Dependencies: NumPy, Matplotlib, SciPy
+All dependencies are added to ConvexityConstraint.yaml. Make sure the virtual environment is activated with `conda activate ConvexityConstraint`.
+
+Modify `vis.py` to show different visualizations. I am currently creating a different project with similar functionalities, but for the time being, this should do.
 
 
 <!---
