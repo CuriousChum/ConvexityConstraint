@@ -320,13 +320,13 @@ if __name__ == "__main__":
     cvx_hull = ConvexHull(ori_pts)
     to_plot = np.array([(x, y, val) for _, val, [x, y] in dct["points"]])
 
-    fig, ax = plt.subplots(1, 1,
-                           # subplot_kw={"projection": "3d"}
-                           )
-
     x, y, z = np.array(sorted((x, y, z) for x, y, z in to_plot)).T
 
-    # ax.plot_trisurf(x, y, z, vmin=z.min())
+    # plot the graph of u
+    fig, ax = plt.subplots(1, 1,
+                           subplot_kw={"projection": "3d"}
+                           )
+    ax.plot_trisurf(x, y, z, vmin=z.min())
     edges = np.array([((a, b), (a, c), (b, c))
                       for (a, b, c), _, _ in dct["faces"]]) \
         .reshape(-1, 2)
@@ -334,8 +334,6 @@ if __name__ == "__main__":
     faces = np.array(
         [(a, b, c) for (a, b, c), _, _ in dct["faces"]],
         dtype=np.int64)
-
-    fig2, ax2 = plt.subplots(1, 1, subplot_kw={"projection": "3d"})
 
     points = np.column_stack([x, y])
     fn_est = FunctionalEstimateOnTriangulation(
@@ -350,39 +348,34 @@ if __name__ == "__main__":
     dethess_est = [np.linalg.det(h) for h in hess_est]
     hessrank_est = [np.linalg.matrix_rank(h, tol=2e-1) for h in hess_est]
 
-    # ax2.plot_trisurf(x, y, z, vmin=z.min(), color="green")
-    # ax2.plot_trisurf(x, y, dethess_est, color="green")
-    # ax2.scatter(x, y, hessrank_est)
-
+    # NOTE: For shapes other than [1,2]^2, comment this
     points, hess_ppr_est = get_points_and_ppr_on_square(fn_est, 100)
     dethess_ppr_est = np.array([np.linalg.det(h) for h in hess_ppr_est])
     hessrank_ppr_est = np.array([np.linalg.matrix_rank(h, tol=5e-1)
                                  for h in hess_ppr_est])
 
-    fig3, ax3 = plt.subplots(1, 1, subplot_kw={"projection": "3d"})
-    fig4, ax4 = plt.subplots(1, 1, subplot_kw={"projection": "3d"})
-
+    # NOTE: For shapes other than [1,2]^2, comment this
+    fig2, ax2 = plt.subplots(1, 1, subplot_kw={"projection": "3d"})
     ax2.scatter(points[:, 0], points[:, 1], hessrank_ppr_est)
+
+    # NOTE: For shapes other than [1,2]^2, comment this
+    fig3, ax3 = plt.subplots(1, 1, subplot_kw={"projection": "3d"})
     ax3.scatter(points[:, 0], points[:, 1], dethess_ppr_est)
 
-    # ax2.scatter(x, y, dethess_est, color="green")
-    ax2.scatter(x, y, hessrank_est, color="green")
+    fig4, ax4 = plt.subplots(1, 1, subplot_kw={"projection": "3d"})
     ax4.scatter(x, y, dethess_est, color="green")
 
-    # u_from = np.column_stack([x[edges.T[0]], y[edges.T[0]],
-    #                           np.zeros_like(edges.T[0])])
-    # u_to = np.column_stack([x[edges.T[1]], y[edges.T[1]],
-    #                         np.zeros_like(edges.T[1])])
-    # lc = np.stack([u_from, u_to], axis=1)
-    # print(lc[:, :, :2])
-    # ax2.plot(lc[:, :, 0], lc[:, :, 1], lc[:, :, 2])
+    fig5, ax5 = plt.subplots(1, 1, subplot_kw={"projection": "3d"})
+    ax5.scatter(x, y, hessrank_est, color="green")
 
-    # fig3, ax3 = plt.subplots()
-    # ax3.scatter(grad_est[:, 0], grad_est[:, 1])
-    # ax3.set(aspect='equal')
+    # show the plot of the gradient
+    fig6, ax6 = plt.subplots()
+    ax3.scatter(grad_est[:, 0], grad_est[:, 1])
+    ax3.set(aspect='equal')
 
-    fig4, ax4 = plt.subplots()
-    ax4.plot(x[edges.T], y[edges.T], color="blue")
-    ax4.set(aspect='equal')
+    # show the projected faces
+    fig_4, ax_4 = plt.subplots()
+    ax_4.plot(x[edges.T], y[edges.T], color="blue")
+    ax_4.set(aspect='equal')
 
     plt.show()
