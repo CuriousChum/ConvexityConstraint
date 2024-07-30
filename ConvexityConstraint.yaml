@@ -2,7 +2,7 @@ name: ConvexityConstraint
 channels:
   - conda-forge
 dependencies:
-  - python=3.11
+  - python>=3.6
   - cgal=4.9 # Compatibility was broken since original code in 2015
   - nlopt=2.4.2 # This old version somehow optimizes the Meissner problems more deeply
   - eigen # Monopolist_3 fails now, not sure why, Eigen 3.2.3, which dates from 2015, did not fix 
